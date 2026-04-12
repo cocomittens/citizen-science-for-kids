@@ -1,0 +1,46 @@
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.landing-title {
+  font-size: 42px;
+  margin: 0 0 0.5rem;
+}
+
+.landing-tagline {
+  color: var(--text);
+  font-size: 18px;
+  margin: 0 0 2rem;
+}
+
+.landing-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.landing-button {
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: var(--sans);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid var(--accent);
+}
+
+.landing-button:hover {
+  opacity: 0.9;
+}
+
+.landing-button--outline {
+  background: transparent;
+  color: var(--accent);
+}
