@@ -12,7 +12,6 @@ function Auth() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: make login actually work
   }
 
   return (
