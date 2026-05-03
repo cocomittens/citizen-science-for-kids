@@ -5,9 +5,23 @@ import { findUserByEmail, createUser } from "../db/userQueries";
 
 const SALT_ROUNDS = 10;
 
+// Helper function to validate email/password inputs
+const validateCredentials = (
+  email: string,
+  password: string,
+  res: Response,
+): boolean => {
+  if (!email || !password) {
+    res.status(400).json({ error: "Email and password are required" });
+    return false;
+  }
+  return true;
+};
+
 // Register a new user
 export const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  if (!validateCredentials(email, password, res)) return;
 
   try {
     const existing = await findUserByEmail(email);
@@ -33,6 +47,7 @@ export const register = async (req: Request, res: Response) => {
 // Log user in
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  if (!validateCredentials(email, password, res)) return;
 
   try {
     const teacher = await findUserByEmail(email);
