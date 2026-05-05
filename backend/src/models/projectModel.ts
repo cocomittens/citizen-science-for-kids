@@ -33,3 +33,11 @@ export const createProject = async (
   );
   return result.rows[0];
 };
+
+export const getAllProjects = async (teacherId: string): Promise<Project[]> => {
+  const result = await pool.query(
+    `SELECT * FROM projects WHERE teacher_id = $1 ORDER BY title ASC`,
+    [teacherId],
+  );
+  return result.rows;
+};

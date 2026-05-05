@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../middleware/requireAuth";
-import { createProject } from "../models/projectModel";
+import { createProject, getAllProjects } from "../models/projectModel";
 
 export const handleCreateProject = async (
   req: AuthRequest,
@@ -31,5 +31,21 @@ export const handleCreateProject = async (
       err,
     });
     res.status(500).json({ error: "Failed to create project" });
+  }
+};
+
+export const handleGetAllProjects = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const projects = await getAllProjects(req.teacher!.id);
+    res.json(projects);
+  } catch (err) {
+    console.error("Failed to fetch projects:", {
+      teacherId: req.teacher?.id,
+      err,
+    });
+    res.status(500).json({ error: "Failed to fetch projects" });
   }
 };
