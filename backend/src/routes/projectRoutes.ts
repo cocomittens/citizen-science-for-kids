@@ -11,7 +11,7 @@ const router = Router();
 router.use(requireAuth);
 
 router.post("/", handleCreateProject);
-router.get("/:id", handleGetAllProjects);
+router.get("/", handleGetAllProjects);
 router.get("/:id", handleGetProjectById);
 
 export default router;

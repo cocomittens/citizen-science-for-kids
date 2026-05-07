@@ -13,17 +13,12 @@ export const handleCreateProject = async (
   try {
     const { title, description } = req.body;
 
-    if (!req.teacher) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
     if (!title || typeof title !== "string" || title.trim() === "") {
       res.status(400).json({ error: "title is required" });
       return;
     }
 
-    const project = await createProject(req.teacher.id, {
+    const project = await createProject(req.teacher!.id, {
       title: title.trim(),
       description: description?.trim(),
     });
