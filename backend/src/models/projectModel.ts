@@ -41,3 +41,14 @@ export const getAllProjects = async (teacherId: string): Promise<Project[]> => {
   );
   return result.rows;
 };
+
+export const getProjectById = async (
+  id: string,
+  teacherId: string,
+): Promise<Project | null> => {
+  const result = await pool.query(
+    `SELECT * FROM projects WHERE id = $1 AND teacher_id = $2`,
+    [id, teacherId],
+  );
+  return result.rows[0] ?? null;
+};
