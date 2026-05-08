@@ -4,6 +4,7 @@ import {
   createProject,
   getAllProjects,
   getProjectById,
+  deleteProject,
 } from "../models/projectModel";
 
 export const handleCreateProject = async (
@@ -70,5 +71,29 @@ export const handleGetProjectById = async (
       err,
     });
     res.status(500).json({ error: "Failed to fetch project" });
+  }
+};
+
+export const handleDeleteProject = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const deleted = await deleteProject(
+      req.params.id as string,
+      req.teacher!.id,
+    );
+    if (!deleted) {
+      res.status(404).json({ error: "Project not found" });
+      return;
+    }
+    res.status(204).send();
+  } catch (err) {
+    console.error("Failed to delete project:", {
+      teacherId: req.teacher?.id,
+      projectId: req.params.id,
+      err,
+    });
+    res.status(500).json({ error: "Failed to delete project" });
   }
 };

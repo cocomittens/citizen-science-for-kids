@@ -52,3 +52,14 @@ export const getProjectById = async (
   );
   return result.rows[0] ?? null;
 };
+
+export const deleteProject = async (
+  id: string,
+  teacherId: string,
+): Promise<boolean> => {
+  const result = await pool.query(
+    `DELETE FROM projects WHERE id = $1 AND teacher_id = $2`,
+    [id, teacherId],
+  );
+  return (result.rowCount ?? 0) > 0;
+};
