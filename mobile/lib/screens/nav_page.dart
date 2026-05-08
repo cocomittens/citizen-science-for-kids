@@ -6,6 +6,7 @@ class NavPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF4F8F5),
       appBar: AppBar(
         title: const Text('Citizen Science'),
         centerTitle: true,
@@ -37,7 +38,13 @@ class NavPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/add');
               }
-            )
+            ),
+            ElevatedButton(
+              child: const Text('Edit Observations'),
+              onPressed: () {
+                Navigator.pushNamed(context, '/edit');
+              }
+              )
           ]
         )
       ),

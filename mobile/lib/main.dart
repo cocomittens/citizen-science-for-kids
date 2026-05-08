@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'screens/landing_page.dart';
 import 'screens/nav_page.dart';
-import '/screens/add_obs_page.dart';
-import '/screens/description_page.dart';
-import '/screens/view_obs_page.dart';
+import 'screens/add_obs_page.dart';
+import 'screens/description_page.dart';
+import 'screens/view_obs_page.dart';
+import 'screens/edit_page.dart';
 
 void main() {
   runApp(const CitizenScienceApp());
@@ -24,6 +25,7 @@ class CitizenScienceApp extends StatelessWidget {
         '/add': (context) => const AddObsPage(),
         '/description': (context) => const DescriptionPage(),
         '/view': (context) => const ViewObsPage(),
+        '/edit': (context) => const EditPage(),
       }
     );
   }
