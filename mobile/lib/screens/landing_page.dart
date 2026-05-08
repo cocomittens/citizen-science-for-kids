@@ -94,7 +94,9 @@ class _LandingPageState extends State<LandingPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: joinProject,
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/nav');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
