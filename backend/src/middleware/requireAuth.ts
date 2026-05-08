@@ -15,6 +15,7 @@ export const requireAuth = (
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.log(`Unauthenticated request to ${req.path}`);
     return res.status(401).json({ error: "No token provided" });
   }
 
@@ -28,6 +29,7 @@ export const requireAuth = (
     req.teacher = decoded;
     next();
   } catch (err) {
+    console.log(`Invalid or expired token for ${req.path}:`, err);
     res.status(401).json({ error: "Invalid or expired token" });
   }
 };
