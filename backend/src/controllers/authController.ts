@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { findUserByEmail, createUser } from "../db/userQueries";
+import { JWT_SECRET } from "../config";
 
 const SALT_ROUNDS = 10;
 
@@ -67,7 +68,7 @@ export const login = async (req: Request, res: Response) => {
     // Create token for signed in user, expires after 7 days
     const token = jwt.sign(
       { id: teacher.id, email: teacher.email },
-      process.env.JWT_SECRET as string,
+      JWT_SECRET,
       { expiresIn: "7d" },
     );
 
