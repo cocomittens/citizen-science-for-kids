@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { findUserByEmail, createUser } from "../db/userQueries";
+import { findUserByEmail, createUser } from "../models/userModel";
 import { JWT_SECRET } from "../config";
 
 const SALT_ROUNDS = 10;
