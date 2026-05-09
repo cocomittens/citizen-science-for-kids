@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import authRoutes from "./routes/auth";
+import authRoutes from "./routes/authRoutes";
 import projectRoutes from "./routes/projectRoutes";
 
 const app = express();
