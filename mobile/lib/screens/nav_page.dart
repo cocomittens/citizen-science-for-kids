@@ -27,7 +27,7 @@ class NavPage extends StatelessWidget {
               },
             ),
             ElevatedButton(
-              child: const Text('Your Observations'),
+              child: const Text('View Class Observations'),
               onPressed: () {
                 Navigator.pushNamed(context, '/view');
               }
@@ -36,6 +36,12 @@ class NavPage extends StatelessWidget {
               child: const Text('Add New Observation'),
               onPressed: () {
                 Navigator.pushNamed(context, '/add');
+              }
+            ),
+            ElevatedButton(
+              child: const Text('Edit Current Observations'),
+              onPressed: () {
+                Navigator.pushNamed(context, 'edit');
               }
             )
           ]
