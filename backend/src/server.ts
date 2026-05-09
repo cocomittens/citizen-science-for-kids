@@ -1,9 +1,9 @@
-import express from "express";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth";
-import projectRoutes from "./routes/projectRoutes";
-
 dotenv.config();
+
+import express from "express";
+import authRoutes from "./routes/authRoutes";
+import projectRoutes from "./routes/projectRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;

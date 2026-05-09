@@ -1,5 +1,10 @@
-import pool from "./index";
-import { Teacher } from "../models/user";
+import pool from "../db/index";
+
+export interface Teacher {
+  id: string;
+  email: string;
+  password_hash: string;
+}
 
 // Find existing teacher via email
 export const findUserByEmail = async (
