@@ -5,11 +5,11 @@ class NavPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F8F5),
       appBar: AppBar(
         title: const Text('Citizen Science'),
-        centerTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(40.0),
           child: Text('Experiment/Project name goes here')
@@ -49,10 +49,6 @@ class NavPage extends StatelessWidget {
         )
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: const AutomaticNotchedShape(
-          RoundedRectangleBorder(),
-          StadiumBorder()
-        ),
         notchMargin: 5.0,
         child: Container(height: 30.0),
       ),
