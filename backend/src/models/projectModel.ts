@@ -13,6 +13,11 @@ export interface CreateProjectInput {
   description?: string;
 }
 
+export interface UpdateProjectInput {
+  title?: string;
+  description?: string;
+}
+
 // Generate random class code in format ABC-1234
 const generateClassCode = (): string => {
   const letters = Math.random().toString(36).substring(2, 5).toUpperCase();
@@ -62,4 +67,21 @@ export const deleteProject = async (
     [id, teacherId],
   );
   return (result.rowCount ?? 0) > 0;
+};
+
+export const updateProject = async (
+  id: string,
+  teacherId: string,
+  input: UpdateProjectInput,
+): Promise<Project | null> => {
+  const result = await pool.query(
+    `UPDATE projects
+     SET title = COALESCE($1, title),
+         description = COALESCE($2, description)
+     WHERE id = $3 AND teacher_id = $4
+     RETURNING *`,
+    [input.title ?? null, input.description ?? null, id, teacherId],
+  );
+
+  return result.rows[0] ?? null;
 };

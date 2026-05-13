@@ -5,6 +5,7 @@ import {
   getAllProjects,
   getProjectById,
   deleteProject,
+  updateProject,
 } from "../models/projectModel";
 
 export const handleCreateProject = async (
@@ -95,5 +96,46 @@ export const handleDeleteProject = async (
       err,
     });
     res.status(500).json({ error: "Failed to delete project" });
+  }
+};
+
+export const handleUpdateProject = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { title, description } = req.body;
+
+    if (
+      title !== undefined &&
+      (typeof title !== "string" || title.trim() === "")
+    ) {
+      res.status(400).json({ error: "title cannot be empty" });
+      return;
+    }
+
+    const project = await updateProject(
+      req.params.id as string,
+      req.teacher!.id,
+      {
+        title: title?.trim(),
+        description: description?.trim(),
+      },
+    );
+
+    if (!project) {
+      res.status(404).json({ error: "Project not found" });
+      return;
+    }
+
+    res.json(project);
+  } catch (err) {
+    console.error("Failed to update project:", {
+      teacherId: req.teacher?.id,
+      projectId: req.params.id,
+      err,
+    });
+
+    res.status(500).json({ error: "Failed to update project" });
   }
 };
