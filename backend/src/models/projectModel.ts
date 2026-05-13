@@ -25,20 +25,6 @@ const generateClassCode = (): string => {
   return `${letters}-${numbers}`;
 };
 
-export const createProject = async (
-  teacherId: string,
-  input: CreateProjectInput,
-): Promise<Project> => {
-  const classCode = generateClassCode();
-  const result = await pool.query(
-    `INSERT INTO projects (teacher_id, title, description, class_code)
-     VALUES ($1, $2, $3, $4)
-     RETURNING *`,
-    [teacherId, input.title, input.description ?? null, classCode],
-  );
-  return result.rows[0];
-};
-
 export const getAllProjects = async (teacherId: string): Promise<Project[]> => {
   const result = await pool.query(
     `SELECT * FROM projects WHERE teacher_id = $1 ORDER BY title ASC`,
@@ -68,15 +54,18 @@ export const getProjectByClassCode = async (
   return result.rows[0] ?? null;
 };
 
-export const deleteProject = async (
-  id: string,
+export const createProject = async (
   teacherId: string,
-): Promise<boolean> => {
+  input: CreateProjectInput,
+): Promise<Project> => {
+  const classCode = generateClassCode();
   const result = await pool.query(
-    `DELETE FROM projects WHERE id = $1 AND teacher_id = $2`,
-    [id, teacherId],
+    `INSERT INTO projects (teacher_id, title, description, class_code)
+     VALUES ($1, $2, $3, $4)
+     RETURNING *`,
+    [teacherId, input.title, input.description ?? null, classCode],
   );
-  return (result.rowCount ?? 0) > 0;
+  return result.rows[0];
 };
 
 export const updateProject = async (
@@ -94,4 +83,15 @@ export const updateProject = async (
   );
 
   return result.rows[0] ?? null;
+};
+
+export const deleteProject = async (
+  id: string,
+  teacherId: string,
+): Promise<boolean> => {
+  const result = await pool.query(
+    `DELETE FROM projects WHERE id = $1 AND teacher_id = $2`,
+    [id, teacherId],
+  );
+  return (result.rowCount ?? 0) > 0;
 };
