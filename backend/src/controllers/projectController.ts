@@ -4,6 +4,7 @@ import {
   createProject,
   getAllProjects,
   getProjectById,
+  getProjectByClassCode,
   deleteProject,
   updateProject,
 } from "../models/projectModel";
@@ -71,6 +72,29 @@ export const handleGetProjectById = async (
       projectId: req.params.id,
       err,
     });
+    res.status(500).json({ error: "Failed to fetch project" });
+  }
+};
+
+export const handleGetProjectByClassCode = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const project = await getProjectByClassCode(req.params.classCode as string);
+
+    if (!project) {
+      res.status(404).json({ error: "Project not found" });
+      return;
+    }
+
+    res.json(project);
+  } catch (err) {
+    console.error("Failed to get project by class code:", {
+      classCode: req.params.classCode,
+      err,
+    });
+
     res.status(500).json({ error: "Failed to fetch project" });
   }
 };

@@ -58,6 +58,16 @@ export const getProjectById = async (
   return result.rows[0] ?? null;
 };
 
+export const getProjectByClassCode = async (
+  classCode: string,
+): Promise<Project | null> => {
+  const result = await pool.query(
+    `SELECT * FROM projects WHERE class_code = $1`,
+    [classCode],
+  );
+  return result.rows[0] ?? null;
+};
+
 export const deleteProject = async (
   id: string,
   teacherId: string,
