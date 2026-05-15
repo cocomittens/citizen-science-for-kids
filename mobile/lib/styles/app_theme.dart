@@ -5,7 +5,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.light(
-        primary: Color(0xFF1E5631),
+        primary: Color.fromARGB(255, 44, 124, 71),
         onPrimary: Colors.white,
         surface: Color(0xFFF4F7F4),
         onSurface: Color(0xFF191C19),
@@ -13,7 +13,7 @@ class AppTheme {
         onSurfaceVariant: Color(0xFF424942)
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: Color(0xFF1E5631),
+        backgroundColor: Color.fromARGB(255, 44, 124, 71),
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
