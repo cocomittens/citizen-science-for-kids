@@ -9,11 +9,10 @@ class NavPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Citizen Science'),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(40.0),
-          child: Text('Experiment/Project name goes here')
-          )
+        title: Column(children: [
+          Text('Citizen Science', style: TextStyle(fontSize: 34)),
+          Text('Experiment/Project name goes here', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal))
+        ])
       ),
       body: Center(
         child: Column(
