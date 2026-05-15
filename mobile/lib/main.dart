@@ -21,7 +21,7 @@ class CitizenScienceApp extends StatelessWidget {
       routes: {
         '/landing': (context) => const LandingPage(),
         '/nav': (context) => const NavPage(),
-        '/add': (context) => const AddObsPage(),
+        '/add': (context) => const AddObservationPage(),
         '/description': (context) => const DescriptionPage(),
         '/view': (context) => const ViewObsPage(),
       }
