@@ -1,17 +1,56 @@
 import { useState } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import './Auth.css'
 
 function Auth() {
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const isSignUp = searchParams.get('mode') === 'signup'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+    setSubmitting(true)
+
+    try {
+      if (isSignUp) {
+        const registerRes = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        })
+        if (!registerRes.ok) {
+          const body = await registerRes.json().catch(() => ({}))
+          setError(body.error ?? 'Sign up failed')
+          return
+        }
+      }
+
+      const loginRes = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      if (!loginRes.ok) {
+        const body = await loginRes.json().catch(() => ({}))
+        setError(body.error ?? 'Sign in failed')
+        return
+      }
+
+      const { token } = await loginRes.json()
+      localStorage.setItem('token', token)
+      navigate('/projects')
+    } catch {
+      setError('Network error — is the server running?')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -58,7 +97,9 @@ function Auth() {
             />
           </div>
 
-          <button type="submit" className="auth-button">
+          {error && <p className="auth-error" role="alert">{error}</p>}
+
+          <button type="submit" className="auth-button" disabled={submitting}>
             {isSignUp ? 'Sign Up' : 'Sign In'}
           </button>
         </form>
