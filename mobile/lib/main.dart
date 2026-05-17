@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'screens/landing_page.dart';
 import 'screens/nav_page.dart';
-import '/screens/add_obs_page.dart';
-import '/screens/description_page.dart';
-import '/screens/view_obs_page.dart';
+import 'screens/add_obs_page.dart';
+import 'screens/description_page.dart';
+import 'screens/view_obs_page.dart';
+import 'screens/edit_page.dart';
+import 'styles/app_theme.dart';
 
 void main() {
   runApp(const CitizenScienceApp());
@@ -15,6 +17,7 @@ class CitizenScienceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.light,
       title: 'Citizen Science',
       debugShowCheckedModeBanner: false,
       home: const LandingPage(),
@@ -24,6 +27,7 @@ class CitizenScienceApp extends StatelessWidget {
         '/add': (context) => const AddObservationPage(),
         '/description': (context) => const DescriptionPage(),
         '/view': (context) => const ViewObsPage(),
+        '/edit': (context) => const EditPage(),
       }
     );
   }
