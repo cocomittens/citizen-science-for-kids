@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../middleware/requireAuth";
-import { createField } from "../models/fieldModel";
+import { getFieldsByProjectId, createField } from "../models/fieldModel";
 
 const VALID_FIELD_TYPES = [
   "text",
@@ -9,6 +9,27 @@ const VALID_FIELD_TYPES = [
   "dropdown",
   "textarea",
 ];
+
+export const handleGetFields = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const fields = await getFieldsByProjectId(
+      req.params.id as string,
+      req.teacher!.id,
+    );
+
+    res.json(fields);
+  } catch (err) {
+    console.error("Failed to fetch fields:", {
+      teacherId: req.teacher?.id,
+      projectId: req.params.id,
+      err,
+    });
+    res.status(500).json({ error: "Failed to fetch fields" });
+  }
+};
 
 export const handleCreateField = async (
   req: AuthRequest,

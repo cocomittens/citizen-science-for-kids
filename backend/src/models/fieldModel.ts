@@ -14,6 +14,20 @@ export interface CreateFieldInput {
   options?: string;
 }
 
+export const getFieldsByProjectId = async (
+  projectId: string,
+  teacherId: string,
+): Promise<Field[]> => {
+  const result = await pool.query(
+    `SELECT f.* FROM fields f
+     JOIN projects p ON p.id = f.project_id
+     WHERE f.project_id = $1 AND p.teacher_id = $2
+     ORDER BY f.id ASC`,
+    [projectId, teacherId],
+  );
+  return result.rows;
+};
+
 export const createField = async (
   projectId: string,
   teacherId: string,
