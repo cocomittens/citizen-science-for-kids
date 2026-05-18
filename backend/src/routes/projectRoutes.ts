@@ -9,9 +9,13 @@ import {
   handleDeleteProject,
 } from "../controllers/projectController";
 
+import { handleCreateField } from "../controllers/fieldController";
+
 const router = Router();
 
 router.use(requireAuth);
+
+router.post("/:id/fields", handleCreateField);
 
 router.get("/", handleGetAllProjects);
 router.get("/:id", handleGetProjectById);
