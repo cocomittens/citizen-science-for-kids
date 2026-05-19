@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './Projects.css'
 import { projects } from '../../mockData'
 
@@ -9,10 +10,10 @@ function Projects() {
           <h1>My projects</h1>
           <p>{projects.length} projects</p>
         </div>
-        <button type="button">
+        <Link to="/projects/new" className="new-project-button">
           <span aria-hidden="true">+</span>
           New Project
-        </button>
+        </Link>
       </header>
 
       <ul>
