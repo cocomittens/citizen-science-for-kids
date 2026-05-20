@@ -1,7 +1,6 @@
 export type Project = {
   id: string
-  name: string
-  description: string
-  code: string
-  students: number
+  title: string
+  description?: string
+  class_code: string
 }

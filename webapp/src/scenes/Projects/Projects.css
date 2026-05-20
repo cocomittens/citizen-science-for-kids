@@ -85,7 +85,7 @@
 
 .projects-page li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 2.5rem;
   padding: 1.25rem 1.5rem;
