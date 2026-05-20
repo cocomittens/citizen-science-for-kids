@@ -1,0 +1,23 @@
+.app-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.outline-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 5vh;
+  background: transparent;
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.outline-button:hover {
+  background: var(--code-bg);
+}

@@ -1,40 +1,73 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Header from '../../components/Header'
+import type { Project } from '../../types/types'
 import './Projects.css'
-import { projects } from '../../mockData'
 
 function Projects() {
+  const [projects, setProjects] = useState<Project[]>([])
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('/api/projects', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}))
+          setError(body.error ?? 'Failed to load projects')
+          return
+        }
+        setProjects(await res.json())
+      } catch {
+        setError('Network error — is the server running?')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
   return (
+    <>
+    <Header />
     <div className="projects-page">
       <header>
         <div>
           <h1>My projects</h1>
           <p>{projects.length} projects</p>
         </div>
-        <button type="button">
+        <Link to="/projects/new" className="new-project-button">
           <span aria-hidden="true">+</span>
           New Project
-        </button>
+        </Link>
       </header>
 
-      <ul>
-        {projects.map((project) => (
-          <li key={project.id}>
-            <div>
-              <h2>{project.name}</h2>
-              <p>{project.description}</p>
-            </div>
-            <div className="project-meta">
-              <span>Code</span>
-              <span>{project.code}</span>
-            </div>
-            <div className="project-meta">
-              <span>Students</span>
-              <span>{project.students}</span>
-            </div>
-            <button type="button">View Results</button>
-          </li>
-        ))}
-      </ul>
+      {error && <p className="auth-error" role="alert">{error}</p>}
+      {loading ? (
+        <p>Loading…</p>
+      ) : (
+        <ul>
+          {projects.map((project) => (
+            <li key={project.id}>
+              <div>
+                <h2>{project.title}</h2>
+                <p>{project.description}</p>
+              </div>
+              <div className="project-meta">
+                <span>Code</span>
+                <span>{project.class_code}</span>
+              </div>
+              <button type="button">View Results</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
+    </>
   )
 }
 

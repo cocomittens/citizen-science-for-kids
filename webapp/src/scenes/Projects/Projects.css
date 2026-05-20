@@ -50,21 +50,26 @@
   transition: opacity 0.15s, background 0.15s;
 }
 
-.projects-page header button {
+.projects-page .new-project-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.7rem 1.4rem;
   border: none;
+  border-radius: 5vh;
   background: var(--accent);
   color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s;
 }
 
-.projects-page header button:hover {
+.projects-page .new-project-button:hover {
   opacity: 0.9;
 }
 
-.projects-page header button span {
+.projects-page .new-project-button span {
   font-size: 20px;
   font-weight: 400;
 }
@@ -80,7 +85,7 @@
 
 .projects-page li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 2.5rem;
   padding: 1.25rem 1.5rem;
