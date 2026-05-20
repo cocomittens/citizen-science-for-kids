@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Header from '../../components/Header'
 import type { Project } from '../../types/types'
 import './Projects.css'
 
@@ -31,6 +32,8 @@ function Projects() {
   }, [])
 
   return (
+    <>
+    <Header />
     <div className="projects-page">
       <header>
         <div>
@@ -64,6 +67,7 @@ function Projects() {
         </ul>
       )}
     </div>
+    </>
   )
 }
 

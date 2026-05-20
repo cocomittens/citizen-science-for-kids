@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import Header from '../../components/Header'
 import './NewProject.css'
 
 const FIELD_TYPES = ['text', 'number', 'checkbox', 'dropdown', 'textarea'] as const
@@ -80,6 +81,8 @@ function NewProject() {
   }
 
   return (
+    <>
+    <Header />
     <div className="auth-page">
       <div className="auth-card">
         <h1>New Project</h1>
@@ -170,6 +173,7 @@ function NewProject() {
         </p>
       </div>
     </div>
+    </>
   )
 }
 
