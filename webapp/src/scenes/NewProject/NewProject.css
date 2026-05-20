@@ -1,6 +1,7 @@
 @import '../Auth/Auth.css';
 
-.form-field textarea {
+.form-field textarea,
+.form-field select {
   padding: 0.6rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -9,10 +10,38 @@
   background: var(--bg);
   color: var(--text-h);
   outline: none;
-  resize: vertical;
   transition: border-color 0.15s;
 }
 
-.form-field textarea:focus {
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field textarea:focus,
+.form-field select:focus {
   border-color: var(--accent);
+}
+
+.field-row {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.outline-button {
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  border: 1px solid var(--border);
+  border-radius: 5vh;
+  background: transparent;
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.outline-button:hover {
+  background: var(--code-bg);
 }
