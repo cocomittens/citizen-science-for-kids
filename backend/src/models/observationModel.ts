@@ -21,6 +21,37 @@ export interface CreateObservationInput {
   values: ObservationValue[];
 }
 
+export const getObservationsByProjectId = async (
+  projectId: string,
+  teacherId: string,
+): Promise<ObservationWithValues[]> => {
+  // Verify project belongs to this teacher
+  const projectCheck = await pool.query(
+    `SELECT id FROM projects WHERE id = $1 AND teacher_id = $2`,
+    [projectId, teacherId],
+  );
+
+  if (projectCheck.rows.length === 0) throw new Error("PROJECT_NOT_FOUND");
+
+  const observations = await pool.query(
+    `SELECT * FROM observations WHERE project_id = $1 ORDER BY observed_at DESC`,
+    [projectId],
+  );
+
+  if (observations.rows.length === 0) return [];
+
+  const observationIds = observations.rows.map((o) => o.id);
+  const valuesResult = await pool.query(
+    `SELECT * FROM observation_values WHERE observation_id = ANY($1)`,
+    [observationIds],
+  );
+
+  return observations.rows.map((obs) => ({
+    ...obs,
+    values: valuesResult.rows.filter((v) => v.observation_id === obs.id),
+  }));
+};
+
 export const createObservation = async (
   projectId: string,
   input: CreateObservationInput,

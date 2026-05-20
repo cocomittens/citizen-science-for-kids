@@ -1,5 +1,36 @@
 import { Request, Response } from "express";
-import { createObservation } from "../models/observationModel";
+import { AuthRequest } from "../middleware/requireAuth";
+import {
+  getObservationsByProjectId,
+  createObservation,
+} from "../models/observationModel";
+
+export const handleGetObservations = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const observations = await getObservationsByProjectId(
+      req.params.id as string,
+      req.teacher!.id,
+    );
+
+    res.json(observations);
+  } catch (err) {
+    if ((err as Error).message === "PROJECT_NOT_FOUND") {
+      res.status(404).json({ error: "Project not found" });
+      return;
+    }
+
+    console.error("Failed to fetch observations:", {
+      teacherId: req.teacher?.id,
+      projectId: req.params.id,
+      err,
+    });
+
+    res.status(500).json({ error: "Failed to fetch observations" });
+  }
+};
 
 export const handleCreateObservation = async (
   req: Request,
