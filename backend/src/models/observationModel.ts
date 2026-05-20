@@ -1,0 +1,56 @@
+import pool from "../db";
+
+export interface Observation {
+  id: string;
+  project_id: string;
+  student_name?: string;
+  observed_at: string;
+}
+
+export interface ObservationValue {
+  field_id: string;
+  value: string;
+}
+
+export interface ObservationWithValues extends Observation {
+  values: ObservationValue[];
+}
+
+export interface CreateObservationInput {
+  student_name?: string;
+  values: ObservationValue[];
+}
+
+export const createObservation = async (
+  projectId: string,
+  input: CreateObservationInput,
+): Promise<ObservationWithValues> => {
+  const obsResult = await pool.query(
+    `INSERT INTO observations (project_id, student_name)
+     VALUES ($1, $2)
+     RETURNING *`,
+    [projectId, input.student_name ?? null],
+  );
+
+  const observation = obsResult.rows[0];
+
+  if (input.values.length === 0) {
+    return { ...observation, values: [] };
+  }
+
+  const valueRows = await Promise.all(
+    input.values.map((v) =>
+      pool.query(
+        `INSERT INTO observation_values (observation_id, field_id, value)
+         VALUES ($1, $2, $3)
+         RETURNING *`,
+        [observation.id, v.field_id, v.value],
+      ),
+    ),
+  );
+
+  return {
+    ...observation,
+    values: valueRows.map((r) => r.rows[0]),
+  };
+};
