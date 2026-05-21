@@ -16,13 +16,7 @@ class AppTheme {
         backgroundColor: Color.fromARGB(255, 44, 124, 71),
         foregroundColor: Colors.white,
         elevation: 0,
-        centerTitle: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0)
-          )
-        )
+        centerTitle: true
       ),
       bottomAppBarTheme: BottomAppBarThemeData(
         color: Color(0xFFE2E9E2),

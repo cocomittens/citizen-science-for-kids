@@ -17,4 +17,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  assets:
+    - assets/images/mobile_web_background.png
+    - assets/images/mobile_web_title.png
