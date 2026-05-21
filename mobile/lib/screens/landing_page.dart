@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -77,22 +78,26 @@ class _LandingPageState extends State<LandingPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(height: 24),
-                              const Text(
+                              Text(
                                 'Citizen Science for Kids',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.amber
+                                  )
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              const Text(
+                              Text(
                                 'Join your class project and record observations from the field!',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
+                                style: GoogleFonts.robotoSerif(
+                                  textStyle: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white
+                                  )
                                 ),
                               )
                             ]
