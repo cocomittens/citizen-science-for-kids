@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:citizen_science_mobile/widgets/background_image_wrapper_widget.dart';
 
 class NavPage extends StatelessWidget {
   const NavPage({super.key});
@@ -14,43 +15,47 @@ class NavPage extends StatelessWidget {
           Text('Experiment/Project name goes here', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal))
         ])
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15.0, bottom: 40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                child: const Text('Project Description'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/description');
-                },
-              ),
-              Spacer(flex: 1),
-              ElevatedButton(
-                child: const Text('View Class Observations'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/view');
-                }
-              ),
-              Spacer(flex: 1),
-              ElevatedButton(
-                child: const Text('Add New Observation'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/add');
-                }
-              ),
-              Spacer(flex: 1),
-              ElevatedButton(
-                child: const Text('Edit Current Observations'),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'edit');
-                }
-              ),
-            ]
-          )
-        )  
+      body: BackgroundImageWrapper(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 40.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Spacer(flex: 1),
+                ElevatedButton(
+                  child: const Text('Project Description'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/description');
+                  },
+                ),
+                Spacer(flex: 1),
+                ElevatedButton(
+                  child: const Text('View Class Observations'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/view');
+                  }
+                ),
+                Spacer(flex: 1),
+                ElevatedButton(
+                  child: const Text('Add New Observation'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add');
+                  }
+                ),
+                Spacer(flex: 1),
+                ElevatedButton(
+                  child: const Text('Edit Current Observations'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'edit');
+                  }
+                ),
+                Spacer(flex: 1)
+              ]
+            )
+          )  
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 5.0,
