@@ -11,49 +11,77 @@ class NavPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Column(children: [
-          Text('Citizen Science', style: TextStyle(fontSize: 34)),
-          Text('Experiment/Project name goes here', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal))
+          Padding(
+            padding: EdgeInsetsGeometry.only(top: 10.0),
+            child: Text('Citizen Science', style: TextStyle(fontSize: 34)),
+          ),
+          Padding(
+            padding: EdgeInsetsGeometry.only(bottom: 10.0),
+            child: Text('Experiment/Project name goes here', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white)),
+          )
         ])
       ),
       body: BackgroundImageWrapper(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0, bottom: 40.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Spacer(flex: 1),
-                ElevatedButton(
-                  child: const Text('Project Description'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/description');
-                  },
-                ),
-                Spacer(flex: 1),
-                ElevatedButton(
-                  child: const Text('View Class Observations'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/view');
-                  }
-                ),
-                Spacer(flex: 1),
-                ElevatedButton(
-                  child: const Text('Add New Observation'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/add');
-                  }
-                ),
-                Spacer(flex: 1),
-                ElevatedButton(
-                  child: const Text('Edit Current Observations'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'edit');
-                  }
-                ),
-                Spacer(flex: 1)
-              ]
-            )
+            child: Row(children: [
+              Expanded(flex: 3, child: Container()),
+              Expanded(flex: 3, child:
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Spacer(flex: 1),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40.0,
+                      child: ElevatedButton(
+                        child: const Text('Project Description'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/description');
+                        },
+                      )
+                    ),
+                    Spacer(flex: 1),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40.0,
+                      child: ElevatedButton(
+                        child: const Text('View Class Observations'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/view');
+                        }
+                      )
+                    ),
+                    Spacer(flex: 1),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40.0,
+                      child: ElevatedButton(
+                        child: const Text('Add New Observation'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/add');
+                        }
+                      )
+                    ),
+                    Spacer(flex: 1),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40.0,
+                      child: ElevatedButton(
+                        child: const Text('Edit Current Observations'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'edit');
+                        }
+                      )
+                    ),
+                    Spacer(flex: 1)
+                  ]
+                )
+              ),
+              Expanded(flex: 3, child: Container())
+            ])
           )  
         ),
       ),
