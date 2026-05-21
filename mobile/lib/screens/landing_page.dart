@@ -45,6 +45,8 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF4F8F5),
       body: SafeArea(

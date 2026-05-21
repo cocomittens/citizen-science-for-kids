@@ -15,41 +15,47 @@ class NavPage extends StatelessWidget {
         ])
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          spacing: 30.0,
-          children: [
-            ElevatedButton(
-              child: const Text('Project Description'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/description');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('View Class Observations'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/view');
-              }
-            ),
-            ElevatedButton(
-              child: const Text('Add New Observation'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/add');
-              }
-            ),
-            ElevatedButton(
-              child: const Text('Edit Current Observations'),
-              onPressed: () {
-                Navigator.pushNamed(context, 'edit');
-              }
-            )
-          ]
-        )
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15.0, bottom: 40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                child: const Text('Project Description'),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/description');
+                },
+              ),
+              Spacer(flex: 1),
+              ElevatedButton(
+                child: const Text('View Class Observations'),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/view');
+                }
+              ),
+              Spacer(flex: 1),
+              ElevatedButton(
+                child: const Text('Add New Observation'),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/add');
+                }
+              ),
+              Spacer(flex: 1),
+              ElevatedButton(
+                child: const Text('Edit Current Observations'),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'edit');
+                }
+              ),
+            ]
+          )
+        )  
       ),
       bottomNavigationBar: BottomAppBar(
         notchMargin: 5.0,
-        child: Container(height: 30.0),
+        height: 40.0,
+        child: Container(height: 10.0),
       ),
       floatingActionButton: SizedBox(
         height: 50.0,

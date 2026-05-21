@@ -29,8 +29,8 @@ class AppTheme {
         shape: const AutomaticNotchedShape(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20.0),
-              topLeft: Radius.circular(20.0)
+              topRight: Radius.circular(10.0),
+              topLeft: Radius.circular(10.0)
             )
           ),
           StadiumBorder()
