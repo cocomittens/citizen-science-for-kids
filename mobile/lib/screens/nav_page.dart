@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:citizen_science_mobile/widgets/background_image_wrapper_widget.dart';
-import 'package:citizen_science_mobile/widgets/custom_appbar_widget.dart';
+import 'package:citizen_science_mobile/widgets/background_image_wrapper.dart';
+import 'package:citizen_science_mobile/widgets/custom_appbar.dart';
 
 class NavPage extends StatelessWidget {
   const NavPage({super.key});
@@ -62,7 +62,7 @@ class NavPage extends StatelessWidget {
                       child: ElevatedButton(
                         child: const Text('Edit Current Observations'),
                         onPressed: () {
-                          Navigator.pushNamed(context, 'edit');
+                          Navigator.pushNamed(context, '/edit');
                         }
                       )
                     ),
