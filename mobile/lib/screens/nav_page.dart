@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:citizen_science_mobile/widgets/background_image_wrapper_widget.dart';
+import 'package:citizen_science_mobile/widgets/custom_appbar_widget.dart';
 
 class NavPage extends StatelessWidget {
   const NavPage({super.key});
@@ -9,18 +10,7 @@ class NavPage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(children: [
-          Padding(
-            padding: EdgeInsetsGeometry.only(top: 10.0),
-            child: Text('Citizen Science', style: TextStyle(fontSize: 34)),
-          ),
-          Padding(
-            padding: EdgeInsetsGeometry.only(bottom: 10.0),
-            child: Text('Experiment/Project name goes here', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white)),
-          )
-        ])
-      ),
+      appBar: CustomAppbar(title: "Citizen Science", subtitle: "Project name goes here",),
       body: BackgroundImageWrapper(
         child: Center(
           child: Padding(
