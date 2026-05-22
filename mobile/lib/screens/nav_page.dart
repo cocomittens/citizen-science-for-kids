@@ -7,7 +7,7 @@ class NavPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return Scaffold(
       appBar: CustomAppbar(title: "Citizen Science", subtitle: "Project name goes here",),
