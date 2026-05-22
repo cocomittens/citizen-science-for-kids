@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS observation_values CASCADE;
+DROP TABLE IF EXISTS observations CASCADE;
+DROP TABLE IF EXISTS fields CASCADE;
+DROP TABLE IF EXISTS projects CASCADE;
+DROP TABLE IF EXISTS teachers CASCADE;
+
 CREATE TABLE teachers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email VARCHAR UNIQUE NOT NULL,
@@ -24,8 +30,6 @@ CREATE TABLE observations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
   student_name VARCHAR,
-  latitude FLOAT,
-  longitude FLOAT,
   observed_at TIMESTAMP DEFAULT NOW()
 );
 

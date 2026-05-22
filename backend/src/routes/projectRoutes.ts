@@ -14,18 +14,22 @@ import {
   handleCreateField,
 } from "../controllers/fieldController";
 
+import {
+  handleGetObservations,
+  handleCreateObservation,
+} from "../controllers/observationController";
+
 const router = Router();
 
-router.use(requireAuth);
-
-router.get("/:id/fields", handleGetFields);
-router.post("/:id/fields", handleCreateField);
-
-router.get("/", handleGetAllProjects);
-router.get("/:id", handleGetProjectById);
+router.get("/", requireAuth, handleGetAllProjects);
 router.get("/code/:classCode", handleGetProjectByClassCode);
-router.post("/", handleCreateProject);
-router.put("/:id", handleUpdateProject);
-router.delete("/:id", handleDeleteProject);
+router.get("/:id", requireAuth, handleGetProjectById);
+router.get("/:id/fields", requireAuth, handleGetFields);
+router.get("/:id/observations", requireAuth, handleGetObservations);
+router.post("/:id/fields", requireAuth, handleCreateField);
+router.post("/:id/observations", handleCreateObservation);
+router.post("/", requireAuth, handleCreateProject);
+router.put("/:id", requireAuth, handleUpdateProject);
+router.delete("/:id", requireAuth, handleDeleteProject);
 
 export default router;
