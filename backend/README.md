@@ -8,17 +8,59 @@ Node.js/Express REST API serving both the mobile and web applications.
 - TypeScript
 - PostgreSQL (Supabase)
 
-## Getting Started
+## API Base URL
+
+https://citizen-science-backend.fly.dev
+
+## API Endpoints
+
+### Auth
+
+| Method | Endpoint       | Auth Required | Used By | Description                   |
+| ------ | -------------- | ------------- | ------- | ----------------------------- |
+| POST   | /auth/register | No            | Web     | Create a teacher account      |
+| POST   | /auth/login    | No            | Web     | Login and receive a JWT token |
+
+### Projects
+
+| Method | Endpoint                  | Auth Required | Used By | Description                                |
+| ------ | ------------------------- | ------------- | ------- | ------------------------------------------ |
+| GET    | /projects                 | Yes           | Web     | Get all projects                           |
+| GET    | /projects/:id             | Yes           | Web     | Get a project by its ID                    |
+| GET    | /projects/code/:classCode | No            | Mobile  | Get a project ID from using its class code |
+| POST   | /projects                 | Yes           | Web     | Create a new project                       |
+| PUT    | /projects/:id             | Yes           | Web     | Update a project                           |
+| DELETE | /projects/:id             | Yes           | Web     | Delete a project                           |
+
+### Fields
+
+| Method | Endpoint             | Auth Required | Used By | Description                      |
+| ------ | -------------------- | ------------- | ------- | -------------------------------- |
+| GET    | /projects/:id/fields | Yes           | Both    | Get all fields for a project     |
+| POST   | /projects/:id/fields | Yes           | Web     | Create a new field for a project |
+
+### Observations
+
+| Method | Endpoint                   | Auth Required | Used By | Description                  |
+| ------ | -------------------------- | ------------- | ------- | ---------------------------- |
+| GET    | /projects/:id/observations | No            | Both    | Get all project observations |
+| POST   | /projects/:id/observations | No            | Mobile  | Submit a new observation     |
+
+## Local Development
 
 1. Navigate to the backend folder: `cd backend`
 2. Install dependencies: `npm install`
 3. Create a `.env` file and ask a teammate for the environment variables.
-   For JWT_SECRET, generate your own by entering this command in the terminal:
-   `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
-   Copy that string into your `.env` file.
 4. Run the app: `npm run dev`
+
+## Deployment
+
+The backend is hosted on Fly.io. To deploy backend updates:
+
+1. Navigate to the backend folder: `cd backend`
+2. Run: `fly deploy`
 
 ## Notes
 
-The project currently connects to a Supabase database managed by one of the team members.
-`db/schema.sql` is provided as a reference if you ever need to set up your own database.
+The project connects to a Supabase database. `db/schema.sql` is provided as a
+reference if you ever need to inspect the database structure.
