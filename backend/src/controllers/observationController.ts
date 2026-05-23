@@ -3,6 +3,7 @@ import { AuthRequest } from "../middleware/requireAuth";
 import {
   getObservationsByProjectId,
   createObservation,
+  updateObservation,
 } from "../models/observationModel";
 
 export const handleGetObservations = async (
@@ -70,5 +71,37 @@ export const handleCreateObservation = async (
       err,
     });
     res.status(500).json({ error: "Failed to create observation" });
+  }
+};
+
+export const handleUpdateObservation = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { student_name, values } = req.body;
+
+    if (!values || !Array.isArray(values)) {
+      res.status(400).json({ error: "values must be an array" });
+      return;
+    }
+
+    const observation = await updateObservation(req.params.id as string, {
+      student_name: student_name?.trim(),
+      values,
+    });
+
+    if (!observation) {
+      res.status(404).json({ error: "Observation not found" });
+      return;
+    }
+
+    res.json(observation);
+  } catch (err) {
+    console.error("Failed to update observation:", {
+      observationId: req.params.id,
+      err,
+    });
+    res.status(500).json({ error: "Failed to update observation" });
   }
 };

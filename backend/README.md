@@ -41,10 +41,11 @@ https://citizen-science-backend.fly.dev
 
 ### Observations
 
-| Method | Endpoint                   | Auth Required | Used By | Description                  |
-| ------ | -------------------------- | ------------- | ------- | ---------------------------- |
-| GET    | /projects/:id/observations | No            | Both    | Get all project observations |
-| POST   | /projects/:id/observations | No            | Mobile  | Submit a new observation     |
+| Method | Endpoint                   | Auth Required | Used By | Description                              |
+| ------ | -------------------------- | ------------- | ------- | ---------------------------------------- |
+| GET    | /projects/:id/observations | No            | Both    | Get all project observations             |
+| POST   | /projects/:id/observations | No            | Mobile  | Submit a new observation                 |
+| PATCH  | /projects/observations/:id | No            | Mobile  | Edit an observation from current session |
 
 ## Local Development
 

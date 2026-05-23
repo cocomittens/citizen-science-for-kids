@@ -22,6 +22,11 @@ export interface CreateObservationInput {
   values: ObservationValue[];
 }
 
+export interface UpdateObservationInput {
+  student_name?: string;
+  values: ObservationValue[];
+}
+
 export const getObservationsByProjectId = async (
   projectId: string,
 ): Promise<ObservationWithValues[]> => {
@@ -64,6 +69,48 @@ export const createObservation = async (
   );
 
   const observation = obsResult.rows[0];
+
+  if (input.values.length === 0) {
+    return { ...observation, values: [] };
+  }
+
+  const valueRows = await Promise.all(
+    input.values.map((v) =>
+      pool.query(
+        `INSERT INTO observation_values (observation_id, field_id, value)
+         VALUES ($1, $2, $3)
+         RETURNING *`,
+        [observation.id, v.field_id, v.value],
+      ),
+    ),
+  );
+
+  return {
+    ...observation,
+    values: valueRows.map((r) => r.rows[0]),
+  };
+};
+
+export const updateObservation = async (
+  observationId: string,
+  input: UpdateObservationInput,
+): Promise<ObservationWithValues | null> => {
+  const obsResult = await pool.query(
+    `UPDATE observations
+     SET student_name = $1
+     WHERE id = $2
+     RETURNING *`,
+    [input.student_name ?? null, observationId],
+  );
+
+  if (obsResult.rows.length === 0) return null;
+
+  const observation = obsResult.rows[0];
+
+  // Delete existing values in DB and insert new
+  await pool.query(`DELETE FROM observation_values WHERE observation_id = $1`, [
+    observationId,
+  ]);
 
   if (input.values.length === 0) {
     return { ...observation, values: [] };
