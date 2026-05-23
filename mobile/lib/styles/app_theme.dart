@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData get light {
@@ -14,14 +15,10 @@ class AppTheme {
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: Color.fromARGB(255, 44, 124, 71),
-        foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0)
-          )
+        titleTextStyle: GoogleFonts.robotoSerif(
+          textStyle: TextStyle(fontSize: 50, color: Colors.amber),
         )
       ),
       bottomAppBarTheme: BottomAppBarThemeData(
@@ -29,8 +26,8 @@ class AppTheme {
         shape: const AutomaticNotchedShape(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20.0),
-              topLeft: Radius.circular(20.0)
+              topRight: Radius.circular(10.0),
+              topLeft: Radius.circular(10.0)
             )
           ),
           StadiumBorder()

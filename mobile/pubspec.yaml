@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies: 
+  google_fonts: ^8.1.0
   flutter:
     sdk: flutter
 
@@ -17,4 +18,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  assets:
+    - assets/images/mobile_web_background.png
+    - assets/images/mobile_web_title.png
