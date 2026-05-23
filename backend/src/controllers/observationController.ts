@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { AuthRequest } from "../middleware/requireAuth";
 import {
   getObservationsByProjectId,
   createObservation,
