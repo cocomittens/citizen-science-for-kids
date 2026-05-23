@@ -17,6 +17,7 @@ export interface ObservationWithValues extends Observation {
 }
 
 export interface CreateObservationInput {
+  id: string;
   student_name?: string;
   values: ObservationValue[];
 }
@@ -56,10 +57,10 @@ export const createObservation = async (
   input: CreateObservationInput,
 ): Promise<ObservationWithValues> => {
   const obsResult = await pool.query(
-    `INSERT INTO observations (project_id, student_name)
-     VALUES ($1, $2)
+    `INSERT INTO observations (id, project_id, student_name)
+     VALUES ($1, $2, $3)
      RETURNING *`,
-    [projectId, input.student_name ?? null],
+    [input.id, projectId, input.student_name ?? null],
   );
 
   const observation = obsResult.rows[0];

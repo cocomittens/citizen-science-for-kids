@@ -35,7 +35,12 @@ export const handleCreateObservation = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { student_name, values } = req.body;
+    const { id, student_name, values } = req.body;
+
+    if (!id || typeof id !== "string") {
+      res.status(400).json({ error: "id is required" });
+      return;
+    }
 
     if (!values || !Array.isArray(values)) {
       res.status(400).json({ error: "values must be an array" });
@@ -53,6 +58,7 @@ export const handleCreateObservation = async (
     }
 
     const observation = await createObservation(req.params.id as string, {
+      id,
       student_name: student_name?.trim(),
       values,
     });
