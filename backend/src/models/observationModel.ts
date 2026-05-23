@@ -23,12 +23,11 @@ export interface CreateObservationInput {
 
 export const getObservationsByProjectId = async (
   projectId: string,
-  teacherId: string,
 ): Promise<ObservationWithValues[]> => {
-  // Verify project belongs to this teacher
+  // Verify project exists
   const projectCheck = await pool.query(
-    `SELECT id FROM projects WHERE id = $1 AND teacher_id = $2`,
-    [projectId, teacherId],
+    `SELECT id FROM projects WHERE id = $1`,
+    [projectId],
   );
 
   if (projectCheck.rows.length === 0) throw new Error("PROJECT_NOT_FOUND");
