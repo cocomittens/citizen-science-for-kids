@@ -6,13 +6,12 @@ import {
 } from "../models/observationModel";
 
 export const handleGetObservations = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
 ): Promise<void> => {
   try {
     const observations = await getObservationsByProjectId(
       req.params.id as string,
-      req.teacher!.id,
     );
 
     res.json(observations);
@@ -23,7 +22,6 @@ export const handleGetObservations = async (
     }
 
     console.error("Failed to fetch observations:", {
-      teacherId: req.teacher?.id,
       projectId: req.params.id,
       err,
     });
