@@ -17,13 +17,15 @@ import {
 import {
   handleGetObservations,
   handleCreateObservation,
+  handleUpdateObservation,
 } from "../controllers/observationController";
 
 const router = Router();
 
 router.get("/", requireAuth, handleGetAllProjects);
 router.get("/code/:classCode", handleGetProjectByClassCode);
-router.get("/:id", requireAuth, handleGetProjectById);
+router.patch("/observations/:id", handleUpdateObservation);
+router.get("/:id", handleGetProjectById);
 router.get("/:id/fields", requireAuth, handleGetFields);
 router.get("/:id/observations", handleGetObservations);
 router.post("/:id/fields", requireAuth, handleCreateField);
