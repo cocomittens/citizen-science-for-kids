@@ -36,7 +36,7 @@ https://citizen-science-backend.fly.dev
 
 | Method | Endpoint                 | Auth Required | Used By      | Description                      |
 | ------ | ------------------------ | ------------- | ------------ | -------------------------------- |
-| GET    | /api/projects/:id/fields | Yes           | Mobile & Web | Get all fields for a project     |
+| GET    | /api/projects/:id/fields | No            | Mobile & Web | Get all fields for a project     |
 | POST   | /api/projects/:id/fields | Yes           | Web          | Create a new field for a project |
 
 ### Observations
