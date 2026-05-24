@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:citizen_science_mobile/widgets/background_image_wrapper_widget.dart';
+import 'package:citizen_science_mobile/widgets/background_image_wrapper.dart';
+import 'package:citizen_science_mobile/widgets/custom_appbar.dart';
 
 class NavPage extends StatelessWidget {
   final Map<String, dynamic> projectData;
@@ -11,21 +12,10 @@ class NavPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(children: [
-          Padding(
-            padding: EdgeInsetsGeometry.only(top: 10.0),
-            child: Text('Citizen Science', style: TextStyle(fontSize: 34)),
-          ),
-          Padding(
-            padding: EdgeInsetsGeometry.only(bottom: 10.0),
-            child: Text('Experiment/Project name goes here', style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white)),
-          )
-        ])
-      ),
+      appBar: CustomAppbar(title: "Citizen Science", subtitle: "Project name goes here",),
       body: BackgroundImageWrapper(
         child: Center(
           child: Padding(
@@ -81,7 +71,7 @@ class NavPage extends StatelessWidget {
                       child: ElevatedButton(
                         child: const Text('Edit Current Observations'),
                         onPressed: () {
-                          Navigator.pushNamed(context, 'edit');
+                          Navigator.pushNamed(context, '/edit');
                         }
                       )
                     ),

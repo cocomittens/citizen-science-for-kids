@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:citizen_science_mobile/widgets/background_image_wrapper.dart';
+import 'package:citizen_science_mobile/widgets/custom_appbar.dart';
 
 class DescriptionPage extends StatelessWidget {
   final Map<String, dynamic> projectData;
