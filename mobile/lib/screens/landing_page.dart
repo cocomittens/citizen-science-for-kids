@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -10,30 +11,67 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   final TextEditingController classCodeController = TextEditingController();
+  bool isLoading = false;
 
-  void joinProject() {
-    String classCode = classCodeController.text.trim();
+  Future<void> joinProject() async {
+    final classCode = classCodeController.text.trim();
 
     if (classCode.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a class code.'),
+      showMessage('Please enter a class code.');
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://citizen-science-backend.fly.dev/api/projects/code/$classCode',
         ),
       );
+
+      if (response.statusCode == 200) {
+        final projectData = Map<String, dynamic>.from(
+          jsonDecode(response.body),
+        );
+
+        if (!mounted) {
+          return;
+        }
+
+        Navigator.pushReplacementNamed(
+          context,
+          '/nav',
+          arguments: projectData,
+        );
+      } else {
+        showMessage('Invalid class code. Please try again.');
+      }
+    } catch (error) {
+      showMessage('Error joining project.');
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  void learnMore() {
+    showMessage('This app helps students record science observations.');
+  }
+
+  void showMessage(String message) {
+    if (!mounted) {
       return;
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Joining project with code: $classCode'),
-      ),
-    );
-  }
-
-  void learnMore() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('This app helps students record science observations.'),
+        content: Text(message),
       ),
     );
   }
@@ -46,129 +84,102 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       body: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/mobile_web_title.png"),
-            fit: BoxFit.cover
-          )
+            image: AssetImage('images/mobile_web_title.png'),
+            fit: BoxFit.cover,
+          ),
         ),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Center(
               child: SingleChildScrollView(
-                child: Row(children: [
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.eco,
-                          size: 90,
-                          color: Colors.green,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 20.0, right: 20.0, left: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(28.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(height: 24),
+                              Icon(
+                                Icons.eco,
+                                size: 80,
+                                color: colorScheme.primary,
+                              ),
+                              const SizedBox(height: 20),
                               Text(
                                 'Citizen Science for Kids',
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: const TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.amber
-                                  )
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: colorScheme.primary,
+                                    ),
                               ),
                               const SizedBox(height: 16),
                               Text(
                                 'Join your class project and record observations from the field!',
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.robotoSerif(
-                                  textStyle: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white
-                                  )
-                                ),
-                              )
-                            ]
-                          )
-                        ),
-                        const SizedBox(height: 32),
-                        TextField(
-                          controller: classCodeController,
-                          decoration: InputDecoration(
-                            labelText: 'Class Code',
-                            labelStyle: TextStyle(
-                              color: Colors.grey
-                            ),
-                            hintText: 'Enter your class code',
-                            hintStyle: TextStyle(
-                              color: const Color.fromARGB(255, 72, 97, 109),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white, width: 1.0
-                              )
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.green,
-                                width: 3.0
-                              )
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            prefixIcon: const Icon(Icons.lock_outline),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/nav');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              textStyle: const TextStyle(fontSize: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: colorScheme.onSurface,
+                                    ),
                               ),
-                            ),
-                            child: const Text('Join Project'),
+                              const SizedBox(height: 32),
+                              TextField(
+                                controller: classCodeController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Class Code',
+                                  hintText: 'Enter your class code',
+                                  border: OutlineInputBorder(),
+                                  prefixIcon: Icon(Icons.lock_outline),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: isLoading ? null : joinProject,
+                                  child: Text(
+                                    isLoading ? 'Joining...' : 'Join Project',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              TextButton(
+                                onPressed: learnMore,
+                                child: const Text('Learn More'),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        TextButton(
-                          onPressed: learnMore,
-                          child: const Text(
-                            'Learn More',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Expanded(flex: 4, child: Container())
-                ]),
-              )
-            )
+                    Expanded(
+                      flex: 4,
+                      child: Container(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
-      )
+      ),
     );
   }
 }

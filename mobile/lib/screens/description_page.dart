@@ -1,18 +1,61 @@
 import 'package:flutter/material.dart';
 
 class DescriptionPage extends StatelessWidget {
-  const DescriptionPage({super.key});
+  final Map<String, dynamic> projectData;
+
+  const DescriptionPage({
+    super.key,
+    required this.projectData,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final projectTitle = projectData['title']?.toString() ??
+        projectData['projectTitle']?.toString() ??
+        projectData['name']?.toString() ??
+        'Project Title Not Available';
+
+    final description = projectData['description']?.toString() ??
+        'Project description not available.';
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Citizen Science'),
+        title: const Text('Project Description'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text('This is where Project Description will be')
-      )
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Project title:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              projectTitle,
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Description:',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              description,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

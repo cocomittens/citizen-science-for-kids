@@ -23,13 +23,27 @@ class CitizenScienceApp extends StatelessWidget {
       home: const LandingPage(),
       routes: {
         '/landing': (context) => const LandingPage(),
-        '/nav': (context) => const NavPage(),
+
+        '/nav': (context) {
+          final projectData =
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+          return NavPage(projectData: projectData);
+        },
+
         '/add': (context) => const AddObservationPage(),
-        '/description': (context) => const DescriptionPage(),
+
+        '/description': (context) {
+          final projectData =
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+          return DescriptionPage(projectData: projectData);
+        },
+
         '/view': (context) => const ViewObsPage(),
+
         '/edit': (context) => const EditPage(),
-      }
+      },
     );
   }
 }
-     
