@@ -26,7 +26,7 @@ router.get("/", requireAuth, handleGetAllProjects);
 router.get("/code/:classCode", handleGetProjectByClassCode);
 router.patch("/observations/:id", handleUpdateObservation);
 router.get("/:id", handleGetProjectById);
-router.get("/:id/fields", requireAuth, handleGetFields);
+router.get("/:id/fields", handleGetFields);
 router.get("/:id/observations", handleGetObservations);
 router.post("/:id/fields", requireAuth, handleCreateField);
 router.post("/:id/observations", handleCreateObservation);
