@@ -47,7 +47,10 @@ export const getObservationsByProjectId = async (
 
   const observationIds = observations.rows.map((o) => o.id);
   const valuesResult = await pool.query(
-    `SELECT * FROM observation_values WHERE observation_id = ANY($1)`,
+    `SELECT ov.*, f.label, f.field_type
+   FROM observation_values ov
+   JOIN fields f ON f.id = ov.field_id
+   WHERE ov.observation_id = ANY($1)`,
     [observationIds],
   );
 
