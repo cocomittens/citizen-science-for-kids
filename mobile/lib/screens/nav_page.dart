@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:citizen_science_mobile/widgets/background_image_wrapper_widget.dart';
 
 class NavPage extends StatelessWidget {
-  const NavPage({super.key});
+  final Map<String, dynamic> projectData;
+
+  const NavPage({
+    super.key,
+    required this.projectData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,11 @@ class NavPage extends StatelessWidget {
                       child: ElevatedButton(
                         child: const Text('Project Description'),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/description');
+                          Navigator.pushNamed(
+                            context,
+                            '/description',
+                            arguments: projectData,
+                          );
                         },
                       )
                     ),
