@@ -1,0 +1,12 @@
+@import '../Projects/Projects.css';
+
+.projects-page header a {
+  text-decoration: none;
+}
+
+.observation {
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
