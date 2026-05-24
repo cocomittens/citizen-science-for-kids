@@ -12,76 +12,95 @@ class NavPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Theme.of(context);
+    final projectTitle =
+        projectData['title']?.toString() ?? 'Project name goes here';
 
     return Scaffold(
-      appBar: CustomAppbar(title: "Citizen Science", subtitle: "Project name goes here",),
+      appBar: CustomAppbar(
+        title: "Citizen Science",
+        subtitle: projectTitle,
+      ),
       body: BackgroundImageWrapper(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0, bottom: 40.0),
-            child: Row(children: [
-              Expanded(flex: 3, child: Container()),
-              Expanded(flex: 3, child:
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Spacer(flex: 1),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 40.0,
-                      child: ElevatedButton(
-                        child: const Text('Project Description'),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/description',
-                            arguments: projectData,
-                          );
-                        },
-                      )
-                    ),
-                    Spacer(flex: 1),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 40.0,
-                      child: ElevatedButton(
-                        child: const Text('View Class Observations'),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/view');
-                        }
-                      )
-                    ),
-                    Spacer(flex: 1),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 40.0,
-                      child: ElevatedButton(
-                        child: const Text('Add New Observation'),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/add');
-                        }
-                      )
-                    ),
-                    Spacer(flex: 1),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 40.0,
-                      child: ElevatedButton(
-                        child: const Text('Edit Current Observations'),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/edit');
-                        }
-                      )
-                    ),
-                    Spacer(flex: 1)
-                  ]
-                )
-              ),
-              Expanded(flex: 3, child: Container())
-            ])
-          )  
+            child: Row(
+              children: [
+                Expanded(flex: 3, child: Container()),
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Spacer(flex: 1),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40.0,
+                        child: ElevatedButton(
+                          child: const Text('Project Description'),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/description',
+                              arguments: projectData,
+                            );
+                          },
+                        ),
+                      ),
+
+                      const Spacer(flex: 1),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40.0,
+                        child: ElevatedButton(
+                          child: const Text('View Class Observations'),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/view');
+                          },
+                        ),
+                      ),
+
+                      const Spacer(flex: 1),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40.0,
+                        child: ElevatedButton(
+                          child: const Text('Add New Observation'),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/add',
+                              arguments: projectData,
+                            );
+                          },
+                        ),
+                      ),
+
+                      const Spacer(flex: 1),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40.0,
+                        child: ElevatedButton(
+                          child: const Text('Edit Current Observations'),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/edit');
+                          },
+                        ),
+                      ),
+
+                      const Spacer(flex: 1),
+                    ],
+                  ),
+                ),
+                Expanded(flex: 3, child: Container()),
+              ],
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -95,9 +114,13 @@ class NavPage extends StatelessWidget {
         child: FloatingActionButton(
           child: const Text('Exit Project'),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/landing', (Route<dynamic> route) => false);
-          }
-        )
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/landing',
+              (Route<dynamic> route) => false,
+            );
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

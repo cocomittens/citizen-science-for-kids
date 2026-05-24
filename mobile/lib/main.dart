@@ -31,7 +31,12 @@ class CitizenScienceApp extends StatelessWidget {
           return NavPage(projectData: projectData);
         },
 
-        '/add': (context) => const AddObservationPage(),
+        '/add': (context) {
+          final projectData =
+              ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+          return AddObservationPage(projectData: projectData);
+        },
 
         '/description': (context) {
           final projectData =

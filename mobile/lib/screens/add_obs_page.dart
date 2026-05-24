@@ -1,7 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+import 'package:citizen_science_mobile/globals.dart';
 
 class AddObservationPage extends StatefulWidget {
-  const AddObservationPage({super.key});
+  final Map<String, dynamic> projectData;
+
+  const AddObservationPage({
+    super.key,
+    required this.projectData,
+  });
 
   @override
   State<AddObservationPage> createState() => _AddObservationPageState();
@@ -9,168 +18,309 @@ class AddObservationPage extends StatefulWidget {
 
 class _AddObservationPageState extends State<AddObservationPage> {
   final TextEditingController studentNameController = TextEditingController();
-  final TextEditingController observationController = TextEditingController();
-  final TextEditingController countController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
-  final TextEditingController notesController = TextEditingController();
 
-  String selectedCategory = 'Plant';
+  final Map<String, TextEditingController> controllers = {};
+  final Map<String, dynamic> answers = {};
 
-  final List<String> categories = [
-    'Plant',
-    'Animal',
-    'Insect',
-    'Weather',
-    'Other',
-  ];
+  List<dynamic> fields = [];
+  bool loading = false;
+  bool submitting = false;
 
-  void saveObservation() {
-    String studentName = studentNameController.text.trim();
-    String observation = observationController.text.trim();
-    String countText = countController.text.trim();
-    String location = locationController.text.trim();
-    String notes = notesController.text.trim();
+  String get projectId {
+    return widget.projectData['id']?.toString() ??
+        widget.projectData['projectId']?.toString() ??
+        widget.projectData['project_id']?.toString() ??
+        '';
+  }
 
-    if (studentName.isEmpty ||
-        observation.isEmpty ||
-        countText.isEmpty ||
-        location.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill out all required fields.'),
-        ),
-      );
+  String get fieldsUrl {
+    return 'https://citizen-science-backend.fly.dev/api/projects/$projectId/fields';
+  }
+
+  String get observationsUrl {
+    return 'https://citizen-science-backend.fly.dev/api/projects/$projectId/observations';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadFields();
+  }
+
+  Future<void> loadFields() async {
+    if (projectId.isEmpty) {
+      showMessage('Project ID is missing.');
       return;
     }
 
-    int? count = int.tryParse(countText);
+    setState(() {
+      loading = true;
+    });
 
-    if (count == null || count <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Count must be a positive number.'),
-        ),
+    try {
+      final response = await http.get(
+        Uri.parse(fieldsUrl),
       );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        setState(() {
+          if (data is List) {
+            fields = data;
+          } else if (data is Map && data['fields'] is List) {
+            fields = data['fields'];
+          } else {
+            fields = [];
+          }
+        });
+
+        for (final field in fields) {
+          final fieldId = field['id'].toString();
+          final fieldType = field['field_type'].toString();
+
+          if (fieldType != 'dropdown') {
+            controllers[fieldId] = TextEditingController();
+          }
+        }
+      } else {
+        print('Field status code: ${response.statusCode}');
+        print('Field response body: ${response.body}');
+        showMessage('Could not load fields.');
+      }
+    } catch (error) {
+      print('Field error: $error');
+      showMessage('Error loading fields.');
+    }
+
+    if (mounted) {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  Future<void> submitObservation() async {
+    final studentName = studentNameController.text.trim();
+
+    if (studentName.isEmpty) {
+      showMessage('Enter student name.');
       return;
     }
 
-    Map<String, dynamic> newObservation = {
-      'studentName': studentName,
-      'category': selectedCategory,
-      'observation': observation,
-      'count': count,
-      'location': location,
-      'notes': notes,
+    final List<Map<String, dynamic>> values = [];
+
+    for (final field in fields) {
+      final fieldId = field['id'].toString();
+      final fieldLabel = field['label'].toString();
+      final fieldType = field['field_type'].toString();
+
+      if (fieldType == 'dropdown') {
+        final selectedAnswer = answers[fieldId];
+
+        if (selectedAnswer == null || selectedAnswer.toString().isEmpty) {
+          showMessage('Pick $fieldLabel.');
+          return;
+        }
+
+        values.add({
+          'field_id': fieldId,
+          'value': selectedAnswer.toString(),
+        });
+      } else {
+        final value = controllers[fieldId]?.text.trim() ?? '';
+
+        if (value.isEmpty) {
+          showMessage('Enter $fieldLabel.');
+          return;
+        }
+
+        values.add({
+          'field_id': fieldId,
+          'value': value,
+        });
+      }
+    }
+
+    final observationId = const Uuid().v4();
+
+    final newObservation = {
+      'id': observationId,
+      'student_name': studentName,
+      'values': values,
     };
 
-    Navigator.pop(context, newObservation);
+    setState(() {
+      submitting = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse(observationsUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(newObservation),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Globals.current_observations.add(newObservation);
+
+        showMessage('Observation submitted.');
+
+        if (!mounted) {
+          return;
+        }
+
+        Navigator.pop(context);
+      } else {
+        print('Submit status code: ${response.statusCode}');
+        print('Submit response body: ${response.body}');
+        showMessage('Could not submit observation.');
+      }
+    } catch (error) {
+      print('Submit error: $error');
+      showMessage('Error submitting observation.');
+    }
+
+    if (mounted) {
+      setState(() {
+        submitting = false;
+      });
+    }
+  }
+
+  Widget buildField(dynamic field) {
+    final fieldId = field['id'].toString();
+    final fieldLabel = field['label'].toString();
+    final fieldType = field['field_type'].toString();
+
+    if (fieldType == 'dropdown') {
+      final optionsText = field['options']?.toString() ?? '';
+
+      final options = optionsText
+          .split(',')
+          .map((option) => option.trim())
+          .where((option) => option.isNotEmpty)
+          .toList();
+
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: DropdownButtonFormField<String>(
+          initialValue: answers[fieldId],
+          decoration: InputDecoration(
+            labelText: fieldLabel,
+            border: const OutlineInputBorder(),
+          ),
+          items: options.map((option) {
+            return DropdownMenuItem<String>(
+              value: option,
+              child: Text(option),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              answers[fieldId] = value;
+            });
+          },
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextField(
+        controller: controllers[fieldId],
+        keyboardType:
+            fieldType == 'number' ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(
+          labelText: fieldLabel,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+
+  void showMessage(String message) {
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   @override
   void dispose() {
     studentNameController.dispose();
-    observationController.dispose();
-    countController.dispose();
-    locationController.dispose();
-    notesController.dispose();
+
+    for (final controller in controllers.values) {
+      controller.dispose();
+    }
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final projectTitle = widget.projectData['title']?.toString() ??
+        widget.projectData['projectTitle']?.toString() ??
+        widget.projectData['name']?.toString() ??
+        'Add Observation';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Observation'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: studentNameController,
-              decoration: const InputDecoration(
-                labelText: 'Student Name',
-                hintText: 'Example: Alex',
-                border: OutlineInputBorder(),
-              ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(
+            projectTitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            DropdownButtonFormField<String>(
-              value: selectedCategory,
-              decoration: const InputDecoration(
-                labelText: 'Category',
-                border: OutlineInputBorder(),
-              ),
-              items: categories.map((String category) {
-                return DropdownMenuItem<String>(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    selectedCategory = newValue;
-                  });
-                }
-              },
+          TextField(
+            controller: studentNameController,
+            decoration: const InputDecoration(
+              labelText: 'Student Name',
+              hintText: 'Example: Megan',
+              border: OutlineInputBorder(),
             ),
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            TextField(
-              controller: observationController,
-              decoration: const InputDecoration(
-                labelText: 'Observation',
-                hintText: 'Example: butterfly',
-                border: OutlineInputBorder(),
-              ),
+          if (loading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          else if (fields.isEmpty)
+            const Text(
+              'No observation fields were found.',
+              textAlign: TextAlign.center,
+            )
+          else
+            for (final field in fields) buildField(field),
+
+          const SizedBox(height: 8),
+
+          ElevatedButton(
+            onPressed: submitting ? null : submitObservation,
+            child: Text(
+              submitting ? 'Submitting...' : 'Submit Observation',
             ),
-
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: countController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Count',
-                hintText: 'Example: 3',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: locationController,
-              decoration: const InputDecoration(
-                labelText: 'Location',
-                hintText: 'Example: school garden',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: notesController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: 'Notes',
-                border: OutlineInputBorder(),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            ElevatedButton(
-              onPressed: saveObservation,
-              child: const Text('Save Observation'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
