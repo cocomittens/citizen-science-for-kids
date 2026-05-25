@@ -7,6 +7,7 @@ import {
   handleCreateProject,
   handleUpdateProject,
   handleDeleteProject,
+  handleExportProjectCSV,
 } from "../controllers/projectController";
 
 import {
@@ -33,5 +34,6 @@ router.post("/:id/observations", handleCreateObservation);
 router.post("/", requireAuth, handleCreateProject);
 router.put("/:id", requireAuth, handleUpdateProject);
 router.delete("/:id", requireAuth, handleDeleteProject);
+router.get("/:id/export", requireAuth, handleExportProjectCSV);
 
 export default router;

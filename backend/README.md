@@ -28,6 +28,7 @@ https://citizen-science-backend.fly.dev
 | GET    | /api/projects                 | Yes           | Web          | Get all projects                           |
 | GET    | /api/projects/:id             | No            | Mobile & Web | Get a projects details by its ID           |
 | GET    | /api/projects/code/:classCode | No            | Mobile       | Get a project ID from using its class code |
+| GET    | /api/projects/:id/export      | Yes           | Web          | Export observation data as a CSV file      |
 | POST   | /api/projects                 | Yes           | Web          | Create a new project                       |
 | PUT    | /api/projects/:id             | Yes           | Web          | Update a project                           |
 | DELETE | /api/projects/:id             | Yes           | Web          | Delete a project                           |
