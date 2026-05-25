@@ -47,7 +47,7 @@ class CitizenScienceApp extends StatelessWidget {
 
         '/view': (context) => ViewObsPage(),
 
-        '/edit': (context) => const EditPage(),
+        '/edit': (context) => EditPage(),
       },
     );
   }
