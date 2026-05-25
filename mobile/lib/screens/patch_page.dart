@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:citizen_science_mobile/globals.dart';
 
 class PatchPage extends StatefulWidget {
   final Map<String, dynamic> observation;
@@ -16,6 +18,7 @@ class _PatchPage extends State<PatchPage> {
   final Map<String, dynamic> answers = {};
   List<dynamic> fields = [];
   bool loading = false;
+  bool submitting = false;
 
   @override
   void initState() {
@@ -42,12 +45,104 @@ class _PatchPage extends State<PatchPage> {
       final fieldType = field['field_type'];
 
       if (fieldType != 'dropdown') {
-        controllers[fieldId] = TextEditingController();
+        final existingValue = field['value']?.toString() ?? '';
+        controllers[fieldId] = TextEditingController(text: existingValue);
+      } else {
+        answers[fieldId] = field['value']?.toString();
       }
     }
     if (mounted) {
       setState(() {
         loading = false;
+      });
+    }
+  }
+
+  Future<void> editObservation() async {
+    final studentName = studentNameController.text.trim();
+
+    if (studentName.isEmpty) {
+      showMessage('Enter student name.');
+      return;
+    }
+
+    final List<Map<String, dynamic>> values = [];
+
+    for (final field in fields) {
+      final fieldId = field['field_id'].toString();
+      final fieldLabel = field['label'].toString();
+      final fieldType = field['field_type'].toString();
+
+      if (fieldType == 'dropdown') {
+        final selectedAnswer = answers[fieldId];
+
+        if (selectedAnswer == null || selectedAnswer.toString().isEmpty) {
+          showMessage('Pick $fieldLabel.');
+          return;
+        }
+
+        values.add({
+          'field_id': fieldId,
+          'value': selectedAnswer.toString(),
+        });
+      } else {
+        final value = controllers[fieldId]?.text.trim() ?? '';
+
+        if (value.isEmpty) {
+          showMessage('Enter $fieldLabel.');
+          return;
+        }
+
+        values.add({
+          'field_id': fieldId,
+          'value': value
+        });
+      }
+    }
+
+    final observationId = widget.observation['id'];
+
+    final editedObservation = {
+      'id': observationId,
+      'student_name': studentName,
+      'values': values
+    };
+
+    setState(() {
+      submitting = true;
+    });
+
+    try {
+      final response = await http.patch(
+        Uri.parse('https://citizen-science-backend.fly.dev/api/projects/observations/$observationId'),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(editedObservation)
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 202 || response.statusCode == 204) {
+        
+        showMessage('Observation edited');
+
+        if (!mounted) {
+          return;
+        }
+
+        Navigator.pop(context);
+      } else {
+        print('Submit status code: ${response.statusCode}');
+        print('Submit response body: ${response.body}');
+        showMessage('Could not submit observation.');
+      }
+    } catch (error) {
+      print('Submit error: $error');
+      showMessage('Error submitting observation');
+    }
+
+    if (mounted) {
+      setState(() {
+        submitting = false;
       });
     }
   }
@@ -161,9 +256,9 @@ class _PatchPage extends State<PatchPage> {
           const SizedBox(height: 8),
 
           ElevatedButton(
-            onPressed: submitting ? null : submitObservation,
+            onPressed: submitting ? null : editObservation,
             child: Text(
-              submitting ? 'Submitting...' : 'Submit Observation',
+              submitting ? 'Editing...' : 'Edit Observation',
             )
           )
         ]
