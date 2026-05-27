@@ -45,6 +45,26 @@ function Results() {
 
   const labelFor = (fid: string) => fields.find((f) => f.id === fid)?.label ?? fid
 
+  const exportCsv = () => {
+    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`
+    const header = ['Student', 'Submitted at', ...fields.map((f) => f.label)]
+    const rows = observations.map((obs) => {
+      const values = new Map(obs.values.map((v) => [v.field_id, v.value]))
+      return [
+        obs.student_name ?? 'Anonymous',
+        new Date(obs.observed_at).toISOString(),
+        ...fields.map((f) => values.get(f.id) ?? ''),
+      ]
+    })
+    const csv = [header, ...rows].map((r) => r.map(escape).join(',')).join('\n')
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'observations.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <>
     <Header />
@@ -58,7 +78,12 @@ function Results() {
               ` · latest ${new Date(observations[0].observed_at).toLocaleString()}`}
           </p>
         </div>
-        <Link to="/projects">← Back to projects</Link>
+        <div>
+          <button type="button" onClick={exportCsv} disabled={observations.length === 0}>
+            Export CSV
+          </button>
+          <Link to="/projects">← Back to projects</Link>
+        </div>
       </header>
 
       {error && <p>{error}</p>}
