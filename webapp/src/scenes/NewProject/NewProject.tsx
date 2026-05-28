@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Header from '../../components/Header'
+import { apiUrl } from '../../api'
 import './NewProject.css'
 
 const FIELD_TYPES = ['text', 'number', 'checkbox', 'dropdown', 'textarea'] as const
@@ -43,7 +44,7 @@ function NewProject() {
         Authorization: `Bearer ${token}`,
       }
 
-      const projectRes = await fetch('/api/projects', {
+      const projectRes = await fetch(apiUrl('/api/projects'), {
         method: 'POST',
         headers,
         body: JSON.stringify({ title, description }),
@@ -56,7 +57,7 @@ function NewProject() {
       const project = await projectRes.json()
 
       for (const field of fields) {
-        const fieldRes = await fetch(`/api/projects/${project.id}/fields`, {
+        const fieldRes = await fetch(apiUrl(`/api/projects/${project.id}/fields`), {
           method: 'POST',
           headers,
           body: JSON.stringify({
