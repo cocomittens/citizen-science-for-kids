@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Header from '../../components/Header'
+import { apiUrl } from '../../api'
 import './Results.css'
 
 type Field = { id: string; label: string; field_type: string }
@@ -25,8 +26,8 @@ function Results() {
         const token = localStorage.getItem('token')
         const headers = { Authorization: `Bearer ${token}` }
         const [fieldsRes, obsRes] = await Promise.all([
-          fetch(`/api/projects/${id}/fields`, { headers }),
-          fetch(`/api/projects/${id}/observations`, { headers }),
+          fetch(apiUrl(`/api/projects/${id}/fields`), { headers }),
+          fetch(apiUrl(`/api/projects/${id}/observations`), { headers }),
         ])
         if (!fieldsRes.ok || !obsRes.ok) {
           setError('Failed to load results')
