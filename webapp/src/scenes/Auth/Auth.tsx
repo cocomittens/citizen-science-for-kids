@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
+import { apiUrl } from '../../api'
 import './Auth.css'
 
 function Auth() {
@@ -20,7 +21,7 @@ function Auth() {
 
     try {
       if (isSignUp) {
-        const registerRes = await fetch('/api/auth/register', {
+        const registerRes = await fetch(apiUrl('/api/auth/register'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
@@ -32,7 +33,7 @@ function Auth() {
         }
       }
 
-      const loginRes = await fetch('/api/auth/login', {
+      const loginRes = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
