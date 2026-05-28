@@ -75,6 +75,8 @@ class _AddObservationPageState extends State<AddObservationPage> {
           }
         });
 
+        print(fields);
+
         for (final field in fields) {
           final fieldId = field['id'].toString();
           final fieldType = field['field_type'].toString();
@@ -109,11 +111,13 @@ class _AddObservationPageState extends State<AddObservationPage> {
     }
 
     final List<Map<String, dynamic>> values = [];
+    final List<Map<String, dynamic>> stored_values = [];
 
     for (final field in fields) {
       final fieldId = field['id'].toString();
       final fieldLabel = field['label'].toString();
       final fieldType = field['field_type'].toString();
+      final fieldOptions = field['options'];
 
       if (fieldType == 'dropdown') {
         final selectedAnswer = answers[fieldId];
@@ -122,6 +126,14 @@ class _AddObservationPageState extends State<AddObservationPage> {
           showMessage('Pick $fieldLabel.');
           return;
         }
+
+        stored_values.add({
+          'field_id': fieldId,
+          'field_type': fieldType,
+          'label': fieldLabel,
+          'value': selectedAnswer.toString(),
+          'options': fieldOptions
+        });
 
         values.add({
           'field_id': fieldId,
@@ -134,6 +146,14 @@ class _AddObservationPageState extends State<AddObservationPage> {
           showMessage('Enter $fieldLabel.');
           return;
         }
+
+        stored_values.add({
+          'field_id': fieldId,
+          'field_type': fieldType,
+          'label': fieldLabel,
+          'value': value,
+          'options': fieldOptions
+        });
 
         values.add({
           'field_id': fieldId,
@@ -150,6 +170,12 @@ class _AddObservationPageState extends State<AddObservationPage> {
       'values': values,
     };
 
+    final storedObservation = {
+      'id': observationId,
+      'student_name': studentName,
+      'values': stored_values,
+    };
+
     setState(() {
       submitting = true;
     });
@@ -164,7 +190,7 @@ class _AddObservationPageState extends State<AddObservationPage> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Globals.current_observations.add(newObservation);
+        Globals.current_observations.add(storedObservation);
 
         showMessage('Observation submitted.');
 

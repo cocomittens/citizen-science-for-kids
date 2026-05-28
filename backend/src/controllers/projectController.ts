@@ -8,6 +8,7 @@ import {
   updateProject,
   deleteProject,
 } from "../models/projectModel";
+import { getObservationsByProjectId } from "../models/observationModel";
 
 export const handleGetAllProjects = async (
   req: AuthRequest,
@@ -157,5 +158,48 @@ export const handleDeleteProject = async (
       err,
     });
     res.status(500).json({ error: "Failed to delete project" });
+  }
+};
+
+export const handleExportProjectCSV = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const observations = await getObservationsByProjectId(
+      req.params.id as string,
+    );
+
+    if (observations.length === 0) {
+      res.status(200).send("No observations found");
+      return;
+    }
+
+    const fieldLabels = observations[0].values.map((v: any) => v.label);
+    const header = ["student_name", "observed_at", ...fieldLabels].join(",");
+
+    const csvRows = observations.map((obs) =>
+      [
+        obs.student_name ?? "",
+        obs.observed_at,
+        ...fieldLabels.map((label) => {
+          const match = (obs.values as any[]).find((v) => v.label === label);
+          return match?.value ?? "";
+        }),
+      ].join(","),
+    );
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="project_${req.params.id}.csv"`,
+    );
+    res.send([header, ...csvRows].join("\n"));
+  } catch (err) {
+    if ((err as Error).message === "PROJECT_NOT_FOUND") {
+      res.status(404).json({ error: "Project not found" });
+      return;
+    }
+    res.status(500).json({ error: "Failed to export CSV" });
   }
 };

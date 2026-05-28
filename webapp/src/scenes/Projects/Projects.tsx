@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Header from '../../components/Header'
 import type { Project } from '../../types/types'
 import './Projects.css'
 
 function Projects() {
+  const navigate = useNavigate()
   const [projects, setProjects] = useState<Project[]>([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
@@ -61,7 +62,9 @@ function Projects() {
                 <span>Code</span>
                 <span>{project.class_code}</span>
               </div>
-              <button type="button">View Results</button>
+              <button type="button" onClick={() => navigate(`/projects/${project.id}/results`)}>
+                View Results
+              </button>
             </li>
           ))}
         </ul>
