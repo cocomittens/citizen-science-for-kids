@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Header from '../../components/Header'
 import type { Project } from '../../types/types'
-import { apiUrl } from '../../api'
 import './Projects.css'
 
 function Projects() {
@@ -15,7 +14,7 @@ function Projects() {
     const load = async () => {
       try {
         const token = localStorage.getItem('token')
-        const res = await fetch(apiUrl('/api/projects'), {
+        const res = await fetch('/api/projects', {
           headers: { Authorization: `Bearer ${token}` },
         })
         if (!res.ok) {
