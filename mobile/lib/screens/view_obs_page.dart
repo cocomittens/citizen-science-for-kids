@@ -3,13 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:citizen_science_mobile/observation.dart';
 
 class ViewObsPage extends StatefulWidget {
-  const ViewObsPage({Key? key}) : super(key: key);
+  final Map<String, dynamic> projectData;
+
+  const ViewObsPage({
+    super.key,
+    required this.projectData,
+  });
 
   @override
-  _ViewObsPage createState() => _ViewObsPage();
+  State<ViewObsPage> createState() => _ViewObsPageState();
 }
 
-class _ViewObsPage extends State<ViewObsPage> {
+class _ViewObsPageState extends State<ViewObsPage> {
   late Future<List<Observation>> _observationsFuture;
 
   @override
@@ -18,8 +23,15 @@ class _ViewObsPage extends State<ViewObsPage> {
     _observationsFuture = fetchObservations();
   }
 
+  String get projectId {
+    return widget.projectData['id']?.toString() ??
+      widget.projectData['projectId']?.toString() ??
+      widget.projectData['project_id']?.toString() ??
+      '';
+  }
+
   Future<List<Observation>> fetchObservations() async {
-    final url = Uri.parse('https://citizen-science-backend.fly.dev/api/projects/06be212b-3a02-4a76-a123-ad4e4db34fff/observations');
+    final url = Uri.parse('https://citizen-science-backend.fly.dev/api/projects/$projectId/observations');
 
     final response = await http.get(url);
 
