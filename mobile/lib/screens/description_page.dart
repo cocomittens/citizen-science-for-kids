@@ -33,7 +33,7 @@ class DescriptionPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Project title:',
+                  'Project Title:',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
