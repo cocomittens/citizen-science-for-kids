@@ -77,8 +77,6 @@ class _AddObservationPageState extends State<AddObservationPage> {
           }
         });
 
-        print(fields);
-
         for (final field in fields) {
           final fieldId = field['id'].toString();
           final fieldType = field['field_type'].toString();
@@ -313,6 +311,7 @@ class _AddObservationPageState extends State<AddObservationPage> {
         padding: const EdgeInsets.all(16),
         children: [
           const SizedBox(height: 16),
+
           TextField(
             controller: studentNameController,
             decoration: const InputDecoration(
@@ -337,6 +336,12 @@ class _AddObservationPageState extends State<AddObservationPage> {
             )
           else
             for (final field in fields) buildField(field),
+
+          const SizedBox(height: 8),
+
+          const Text('Note: Once submitted, only observations made during your current session can be edited.',
+          textAlign: TextAlign.center
+          ),
 
           const SizedBox(height: 8),
 

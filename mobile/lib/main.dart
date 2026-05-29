@@ -52,7 +52,12 @@ class CitizenScienceApp extends StatelessWidget {
           return ViewObsPage(projectData: projectData);
         },
 
-        '/edit': (context) => EditPage(),
+        '/edit': (context) {
+          final projectData = 
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+          return EditPage(projectData: projectData);
+        }
       },
     );
   }

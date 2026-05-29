@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:citizen_science_mobile/globals.dart';
+import 'package:citizen_science_mobile/widgets/custom_appbar.dart';
+import 'package:citizen_science_mobile/widgets/background_image_wrapper.dart';
 
 class PatchPage extends StatefulWidget {
+  final Map<String, dynamic> projectData;
   final Map<String, dynamic> observation;
+  final int index;
 
-  const PatchPage({super.key, required this.observation});
+  const PatchPage({super.key, required this.observation, required this.index, required this.projectData});
 
   @override State<PatchPage> createState() => _PatchPage();
 }
@@ -32,6 +36,7 @@ class _PatchPage extends State<PatchPage> {
     });
 
     final data = widget.observation;
+    studentNameController.text = data['student_name']?.toString() ?? '';
     fields = data["values"];
 
     setState(() {
@@ -67,11 +72,13 @@ class _PatchPage extends State<PatchPage> {
     }
 
     final List<Map<String, dynamic>> values = [];
+    final List<Map<String, dynamic>> stored_values = [];
 
     for (final field in fields) {
       final fieldId = field['field_id'].toString();
       final fieldLabel = field['label'].toString();
       final fieldType = field['field_type'].toString();
+      final fieldOptions = field['options'].toString();
 
       if (fieldType == 'dropdown') {
         final selectedAnswer = answers[fieldId];
@@ -80,6 +87,14 @@ class _PatchPage extends State<PatchPage> {
           showMessage('Pick $fieldLabel.');
           return;
         }
+
+        stored_values.add({
+          'field_id': fieldId,
+          'field_type': fieldType,
+          'label': fieldLabel,
+          'value': selectedAnswer.toString(),
+          'options': fieldOptions
+        });
 
         values.add({
           'field_id': fieldId,
@@ -93,6 +108,14 @@ class _PatchPage extends State<PatchPage> {
           return;
         }
 
+        stored_values.add({
+          'field_id': fieldId,
+          'field_type': fieldType,
+          'label': fieldLabel,
+          'value': value,
+          'options': fieldOptions
+        });
+
         values.add({
           'field_id': fieldId,
           'value': value
@@ -101,6 +124,12 @@ class _PatchPage extends State<PatchPage> {
     }
 
     final observationId = widget.observation['id'];
+
+    final storedObservation = {
+      'id': observationId,
+      'student_name': studentName,
+      'values': stored_values
+    };
 
     final editedObservation = {
       'id': observationId,
@@ -122,7 +151,8 @@ class _PatchPage extends State<PatchPage> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 202 || response.statusCode == 204) {
-        
+        Globals.current_observations[widget.index]['student_name'] = storedObservation['student_name'];
+        Globals.current_observations[widget.index]['values'] = storedObservation['values'];
         showMessage('Observation edited');
 
         if (!mounted) {
@@ -166,6 +196,8 @@ class _PatchPage extends State<PatchPage> {
         child: DropdownButtonFormField<String>(
           initialValue: answers[fieldId],
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             labelText: fieldLabel,
             border: const OutlineInputBorder()
           ),
@@ -191,6 +223,8 @@ class _PatchPage extends State<PatchPage> {
         keyboardType:
           fieldType == 'number' ? TextInputType.number : TextInputType.text,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           labelText: fieldLabel,
           border: const OutlineInputBorder()
         )
@@ -224,44 +258,53 @@ class _PatchPage extends State<PatchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final projectTitle = widget.projectData['title']?.toString() ??
+      widget.projectData['projectTitle']?.toString() ??
+      widget.projectData['name']?.toString() ??
+      '';
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Observation')
+      appBar: CustomAppbar(
+        title: 'Edit Observation',
+        subtitle: projectTitle
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          TextField(
-            controller: studentNameController,
-            decoration: InputDecoration(
-              labelText: 'Student Name',
-              hintText: '${widget.observation["student_name"]}',
-              border: OutlineInputBorder()
-            )
-          ),
-          const SizedBox(height: 16),
+      body: BackgroundImageWrapper(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            TextField(
+              controller: studentNameController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Student Name',
+                hintText: '${widget.observation["student_name"]}',
+                border: OutlineInputBorder()
+              )
+            ),
+            const SizedBox(height: 16),
 
-          if (loading)
-            const Center(
-              child: CircularProgressIndicator()
-            )
-          else if (fields.isEmpty)
-            const Text(
-              'No observation fields were found',
-              textAlign: TextAlign.center
-            )
-          else
-            for (final field in fields) buildField(field),
+            if (loading)
+              const Center(
+                child: CircularProgressIndicator()
+              )
+            else if (fields.isEmpty)
+              const Text(
+                'No observation fields were found',
+                textAlign: TextAlign.center
+              )
+            else
+              for (final field in fields) buildField(field),
 
-          const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-          ElevatedButton(
-            onPressed: submitting ? null : editObservation,
-            child: Text(
-              submitting ? 'Editing...' : 'Edit Observation',
+            ElevatedButton(
+              onPressed: submitting ? null : editObservation,
+              child: Text(
+                submitting ? 'Editing...' : 'Edit Observation',
+              )
             )
-          )
-        ]
+          ]
+        )
       )
     );
   }

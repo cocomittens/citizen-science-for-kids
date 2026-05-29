@@ -92,7 +92,10 @@ class NavPage extends StatelessWidget {
                         child: ElevatedButton(
                           child: const Text('Edit Current Observations'),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/edit');
+                            Navigator.pushNamed(
+                              context, '/edit',
+                              arguments: projectData
+                            );
                           },
                         ),
                       ),
