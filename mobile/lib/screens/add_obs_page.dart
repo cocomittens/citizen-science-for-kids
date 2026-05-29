@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import 'package:citizen_science_mobile/globals.dart';
+import 'package:citizen_science_mobile/widgets/custom_appbar.dart';
+import 'package:citizen_science_mobile/widgets/background_image_wrapper.dart';
 
 class AddObservationPage extends StatefulWidget {
   final Map<String, dynamic> projectData;
@@ -74,8 +76,6 @@ class _AddObservationPageState extends State<AddObservationPage> {
             fields = [];
           }
         });
-
-        print(fields);
 
         for (final field in fields) {
           final fieldId = field['id'].toString();
@@ -235,7 +235,12 @@ class _AddObservationPageState extends State<AddObservationPage> {
         child: DropdownButtonFormField<String>(
           initialValue: answers[fieldId],
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             labelText: fieldLabel,
+            floatingLabelStyle: TextStyle(
+              backgroundColor: Colors.white
+            ),
             border: const OutlineInputBorder(),
           ),
           items: options.map((option) {
@@ -260,7 +265,12 @@ class _AddObservationPageState extends State<AddObservationPage> {
         keyboardType:
             fieldType == 'number' ? TextInputType.number : TextInputType.text,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           labelText: fieldLabel,
+          floatingLabelStyle: TextStyle(
+            backgroundColor: Colors.white
+          ),
           border: const OutlineInputBorder(),
         ),
       ),
@@ -298,27 +308,25 @@ class _AddObservationPageState extends State<AddObservationPage> {
         'Add Observation';
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Observation'),
+      appBar: CustomAppbar(
+        title: "Add New Observation",
+        subtitle: projectTitle,
       ),
-      body: ListView(
+      body: BackgroundImageWrapper(
+        child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(
-            projectTitle,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
           const SizedBox(height: 16),
 
           TextField(
             controller: studentNameController,
             decoration: const InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
               labelText: 'Student Name',
+              floatingLabelStyle: TextStyle(
+                backgroundColor: Colors.white
+              ),
               hintText: 'Example: Megan',
               border: OutlineInputBorder(),
             ),
@@ -340,6 +348,12 @@ class _AddObservationPageState extends State<AddObservationPage> {
 
           const SizedBox(height: 8),
 
+          const Text('Note: Once submitted, only observations made during your current session can be edited.',
+          textAlign: TextAlign.center
+          ),
+
+          const SizedBox(height: 8),
+
           ElevatedButton(
             onPressed: submitting ? null : submitObservation,
             child: Text(
@@ -347,7 +361,7 @@ class _AddObservationPageState extends State<AddObservationPage> {
             ),
           ),
         ],
-      ),
+      ))
     );
   }
 }

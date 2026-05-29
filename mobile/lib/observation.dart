@@ -1,5 +1,3 @@
-import 'package:citizen_science_mobile/screens/add_obs_page.dart';
-import 'package:flutter/material.dart';
 import 'dart:convert';
 
 List<Observation> observationFromJson(String str) =>
