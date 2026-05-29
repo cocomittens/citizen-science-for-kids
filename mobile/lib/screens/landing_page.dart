@@ -26,8 +26,11 @@ class _LandingPageState extends State<LandingPage> {
     });
 
     try {
+
       final cleanedCode = classCode.trim().toUpperCase();
+      
       final response = await http.get(
+        
         Uri.parse(
           'https://citizen-science-backend.fly.dev/api/projects/code/$cleanedCode',
         ),
