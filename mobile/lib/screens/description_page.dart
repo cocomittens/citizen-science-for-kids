@@ -21,43 +21,47 @@ class DescriptionPage extends StatelessWidget {
         'Project description not available.';
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Project Description'),
-        centerTitle: true,
+      appBar: CustomAppbar(
+        title: "Project Description",
+        subtitle: projectTitle
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Project title:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+      body: BackgroundImageWrapper(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Project title:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  projectTitle,
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Description:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              projectTitle,
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Description:',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-      ),
+          ),
+        )
+      )
     );
   }
 }
