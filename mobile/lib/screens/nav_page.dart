@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:citizen_science_mobile/widgets/background_image_wrapper.dart';
 import 'package:citizen_science_mobile/widgets/custom_appbar.dart';
+import 'package:citizen_science_mobile/globals.dart';
 
 class NavPage extends StatelessWidget {
   final Map<String, dynamic> projectData;
@@ -117,6 +118,7 @@ class NavPage extends StatelessWidget {
         child: FloatingActionButton(
           child: const Text('Exit Project'),
           onPressed: () {
+            Globals.current_observations = [];
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/landing',
