@@ -238,6 +238,9 @@ class _AddObservationPageState extends State<AddObservationPage> {
             filled: true,
             fillColor: Colors.white,
             labelText: fieldLabel,
+            floatingLabelStyle: TextStyle(
+              backgroundColor: Colors.white
+            ),
             border: const OutlineInputBorder(),
           ),
           items: options.map((option) {
@@ -265,6 +268,9 @@ class _AddObservationPageState extends State<AddObservationPage> {
           filled: true,
           fillColor: Colors.white,
           labelText: fieldLabel,
+          floatingLabelStyle: TextStyle(
+            backgroundColor: Colors.white
+          ),
           border: const OutlineInputBorder(),
         ),
       ),
@@ -318,6 +324,9 @@ class _AddObservationPageState extends State<AddObservationPage> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Student Name',
+              floatingLabelStyle: TextStyle(
+                backgroundColor: Colors.white
+              ),
               hintText: 'Example: Megan',
               border: OutlineInputBorder(),
             ),
