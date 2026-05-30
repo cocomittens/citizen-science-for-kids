@@ -40,17 +40,39 @@ class _EditPageState extends State<EditPage> {
       ),
       body: BackgroundImageWrapper(
         child: ListView.builder(
-          itemCount: Globals.current_observations.length,
+          itemCount: Globals.current_observations.length + 1,
           padding: const EdgeInsets.all(12.0),
           itemBuilder: (context, index) {
-            final observation = Globals.current_observations[index];
+            if (index == 0) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0)
+                    ),
+                    child: Text(
+                      'Click on an observation to edit it',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      )
+                    )
+                  )
+                )
+              );
+            }
+
+            final observation = Globals.current_observations[index - 1];
 
             return InkWell(
               onTap: () async {
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PatchPage(observation: observation, index: index, projectData: widget.projectData),
+                    builder: (context) => PatchPage(observation: observation, index: index - 1, projectData: widget.projectData),
                   )
                 );
                 if (mounted) {

@@ -121,11 +121,42 @@ class NavPage extends StatelessWidget {
         child: FloatingActionButton(
           child: const Text('Exit Project'),
           onPressed: () {
-            Globals.current_observations = [];
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/landing',
-              (Route<dynamic> route) => false,
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text(
+                    'Exit Project',
+                    textAlign: TextAlign.center
+                  ),
+                  content: const Text(
+                    'Are you sure you want to exit?',
+                    textAlign: TextAlign.center
+                  ),
+                  actionsAlignment: MainAxisAlignment.center,
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+
+                        Globals.current_observations = [];
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/landing',
+                          (Route<dynamic> route) => false
+                        );
+                      },
+                      child: const Text('Yes')
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('No')
+                    )
+                  ]
+                );
+              }
             );
           },
         ),
