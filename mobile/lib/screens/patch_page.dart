@@ -199,7 +199,10 @@ class _PatchPage extends State<PatchPage> {
             filled: true,
             fillColor: Colors.white,
             labelText: fieldLabel,
-            border: const OutlineInputBorder()
+            border: const OutlineInputBorder(),
+            floatingLabelStyle: TextStyle(
+              backgroundColor: Colors.white
+            )
           ),
           items: options.map((option) {
             return DropdownMenuItem<String>(
@@ -226,7 +229,10 @@ class _PatchPage extends State<PatchPage> {
           filled: true,
           fillColor: Colors.white,
           labelText: fieldLabel,
-          border: const OutlineInputBorder()
+          border: const OutlineInputBorder(),
+          floatingLabelStyle: TextStyle(
+            backgroundColor: Colors.white
+          )
         )
       )
     );
@@ -278,7 +284,10 @@ class _PatchPage extends State<PatchPage> {
                 fillColor: Colors.white,
                 labelText: 'Student Name',
                 hintText: '${widget.observation["student_name"]}',
-                border: OutlineInputBorder()
+                border: OutlineInputBorder(),
+                floatingLabelStyle: TextStyle(
+                  backgroundColor: Colors.white
+                )
               )
             ),
             const SizedBox(height: 16),

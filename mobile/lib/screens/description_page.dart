@@ -36,39 +36,40 @@ class DescriptionPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16)
               ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Project Title:',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Project Title:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  projectTitle,
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Description:',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  const SizedBox(height: 8),
+                  Text(
+                    projectTitle,
+                    style: const TextStyle(fontSize: 18),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Description:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ],
+              )
+            )
           ),
-        ))
+        )
       )
     );
   }
