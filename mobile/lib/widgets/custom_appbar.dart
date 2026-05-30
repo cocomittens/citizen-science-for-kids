@@ -11,20 +11,31 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Column(children: [
-        Padding(
-          padding: EdgeInsetsGeometry.only(top: 10.0),
-          child: Text(title, style: TextStyle(fontSize: 34)),
-        ),
-        Padding(
-          padding: EdgeInsetsGeometry.only(bottom: 10.0),
-          child: Text(subtitle,
-          style: TextStyle(
-            fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white
-          )
-          )
+      centerTitle: true,
+      title: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+          Padding(
+            padding: EdgeInsetsGeometry.only(top: 10.0),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title, style: TextStyle(fontSize: 34)
+              ),
+            )
+          ),
+          Padding(
+            padding: EdgeInsetsGeometry.only(bottom: 10.0),
+            child: Text(subtitle,
+            style: TextStyle(
+              fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white
+            )
+            )
+          )]
         )
-      ])
+      )
     );
   }
 }
