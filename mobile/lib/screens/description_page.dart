@@ -26,10 +26,18 @@ class DescriptionPage extends StatelessWidget {
         subtitle: projectTitle
       ),
       body: BackgroundImageWrapper(
-        child: Center(
+        child: Align(
+          alignment: AlignmentGeometry.topCenter,
           child: Padding(
             padding: const EdgeInsets.all(24.0),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16)
+              ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
@@ -60,7 +68,7 @@ class DescriptionPage extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ))
       )
     );
   }
