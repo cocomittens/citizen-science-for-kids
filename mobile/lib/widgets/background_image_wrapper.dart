@@ -9,7 +9,7 @@ class BackgroundImageWrapper extends StatelessWidget{
     return DecoratedBox(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("images/mobile_web_background.png"),
+          image: AssetImage("assets/images/mobile_web_background.png"),
           fit: BoxFit.cover
         )
       ),

@@ -91,7 +91,7 @@ class _LandingPageState extends State<LandingPage> {
       body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/mobile_web_title.png'),
+            image: AssetImage('assets/images/mobile_web_title.png'),
             fit: BoxFit.cover,
           ),
         ),
